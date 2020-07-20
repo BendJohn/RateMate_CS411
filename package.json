@@ -1,0 +1,25 @@
+{
+  "name": "ratemate_cs411",
+  "version": "1.0.0",
+  "description": "An application that uses ratemyprofessor data and class data to recommend classes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BendJohn/RateMate_CS411.git"
+  },
+  "author": "Ben John, Andrew Chao, Danielle Yang, Julia Wisowaty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BendJohn/RateMate_CS411/issues"
+  },
+  "homepage": "https://github.com/BendJohn/RateMate_CS411#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
