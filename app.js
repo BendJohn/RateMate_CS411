@@ -10,7 +10,7 @@ connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!');
 });
-connection.query('SELECT * FROM professor', (err,rows) => {
+connection.query('SELECT * FROM course', (err,rows) => {
   if(err) throw err;
 
   console.log('Data received from Db:');
