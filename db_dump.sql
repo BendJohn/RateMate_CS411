@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.21, for macos10.15 (x86_64)
 --
 -- Host: localhost    Database: ratemate
 -- ------------------------------------------------------
@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `course`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course` (
   `CRN` int NOT NULL,
-  `comments` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comments` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `availability` tinyint(1) DEFAULT NULL,
   `avgGpa` float DEFAULT NULL,
-  `requirements_filled` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `requirements_filled` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`CRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `enrollments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enrollments` (
-  `netid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `netid` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `CRN` int NOT NULL,
   PRIMARY KEY (`netid`,`CRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `professor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `professor` (
-  `professor_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `professor_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `avg_rating` decimal(2,1) DEFAULT NULL,
   PRIMARY KEY (`professor_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -86,7 +86,7 @@ CREATE TABLE `professor` (
 
 LOCK TABLES `professor` WRITE;
 /*!40000 ALTER TABLE `professor` DISABLE KEYS */;
-INSERT INTO `professor` VALUES ('Abdussalam Alawini',4.9);
+INSERT INTO `professor` VALUES ('Abdussalam Alawini',4.9),('Bob Murphey',4.5),('Jose Vazquez',3.5),('Karle Flanagan',5.0),('Werner Baer',3.2);
 /*!40000 ALTER TABLE `professor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,8 +98,8 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `professor_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `semester` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `professor_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `semester` varchar(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `CRN` int DEFAULT NULL,
   KEY `professor_name` (`professor_name`),
   KEY `CRN` (`CRN`),
@@ -126,8 +126,8 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `netid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `standing` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `netid` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `standing` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`netid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -151,4 +151,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-19 22:59:41
+-- Dump completed on 2020-07-22 21:29:12
