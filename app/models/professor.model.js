@@ -2,8 +2,8 @@ const sql = require("./db.js");
 
 // constructor
 const Professor = function(professor) {
-  this.name = professor.name;
-  this.rating = professor.rating;
+  this.professor_name = professor.professor_name;
+  this.avg_rating = professor.avg_rating;
 };
 
 Professor.create = (newProfessor, result) => {
@@ -20,7 +20,7 @@ Professor.create = (newProfessor, result) => {
 };
 
 Professor.findById = (professorName, result) => {
-  sql.query(`SELECT * FROM professor WHERE name = ${professorName}`, (err, res) => {
+  sql.query(`SELECT * FROM professor WHERE professor_name = ${professorName}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -51,10 +51,10 @@ Professor.getAll = result => {
   });
 };
 
-Professor.updateById = (name, professor, result) => {
+Professor.updateById = (professor_name, professor, result) => {
   sql.query(
-    "UPDATE professor SET rating = ? WHERE name = ?",
-    [professor.rating, name],
+    "UPDATE professor SET avg_rating = ? WHERE professor_name = ?",
+    [professor.rating, professor_name],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -74,8 +74,8 @@ Professor.updateById = (name, professor, result) => {
   );
 };
 
-Professor.remove = (name, result) => {
-  sql.query("DELETE FROM professors WHERE name = ?", name, (err, res) => {
+Professor.remove = (professor_name, result) => {
+  sql.query("DELETE FROM professors WHERE professor_name = ?", professor_name, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -88,7 +88,7 @@ Professor.remove = (name, result) => {
       return;
     }
 
-    console.log("deleted professor with name: ", name);
+    console.log("deleted professor with name: ", professor_name);
     result(null, res);
   });
 };
