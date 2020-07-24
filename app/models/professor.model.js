@@ -20,7 +20,7 @@ Professor.create = (newProfessor, result) => {
 };
 
 Professor.findById = (professorName, result) => {
-  sql.query(`SELECT * FROM professor WHERE professor_name = ${professorName}`, (err, res) => {
+  sql.query(`SELECT * FROM professor WHERE professor_name = '${professorName}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -75,7 +75,7 @@ Professor.updateById = (professor_name, professor, result) => {
 };
 
 Professor.remove = (professor_name, result) => {
-  sql.query("DELETE FROM professors WHERE professor_name = ?", professor_name, (err, res) => {
+  sql.query(`DELETE FROM professor WHERE professor_name = '${professor_name}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
