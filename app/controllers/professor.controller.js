@@ -40,15 +40,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Professor with a professorId
 exports.findOne = (req, res) => {
-    Professor.findById(req.params.professor_name, (err, data) => {
+    Professor.findById(req.params.professorName, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
-              message: `Not found Professor with id ${req.params.professor_name}.`
+              message: `Not found Professor with id ${req.params.professorName}.`
             });
           } else {
             res.status(500).send({
-              message: "Error retrieving Professor with id " + req.params.professor_name
+              message: "Error retrieving Professor with id " + req.params.professorName
             });
           }
         } else res.send(data);
@@ -65,17 +65,17 @@ exports.update = (req, res) => {
     }
 
     Professor.updateById(
-        req.params.professor_name,
+        req.params.professorName,
         new Professor(req.body),
         (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
             res.status(404).send({
-                message: `Not found Professor with name ${req.params.professor_name}.`
+                message: `Not found Professor with name ${req.params.professorName}.`
             });
             } else {
             res.status(500).send({
-                message: "Error updating Professor with name " + req.params.professor_name
+                message: "Error updating Professor with name " + req.params.professorName
             });
             }
         } else res.send(data);
@@ -85,18 +85,18 @@ exports.update = (req, res) => {
 
 // Delete a Professor with the specified professorId in the request
 exports.delete = (req, res) => {
-    Professor.remove(req.params.professor_name, (err, data) => {
+    Professor.remove(req.params.professorName, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
-              message: `Not found Professor with name ${req.params.professor_name}.`
+              message: `Not found Professor with name ${req.params.professorName}.`
             });
           } else {
             res.status(500).send({
-              message: "Could not delete Professor with name " + req.params.professor_name
+              message: "Could not delete Professor with name " + req.params.professorName
             });
           }
-        } else res.send({ message: `Professor was deleted successfully!` });
+        } else res.send({ message: `Professor ${req.params.professorName} was deleted successfully!` });
       });
 };
 
@@ -108,6 +108,6 @@ exports.deleteAll = (req, res) => {
             message:
               err.message || "Some error occurred while removing all professors."
           });
-        else res.send({ message: `All Professor were deleted successfully!` });
+        else res.send({ message: `All Professors were deleted successfully!` });
       });
 };
