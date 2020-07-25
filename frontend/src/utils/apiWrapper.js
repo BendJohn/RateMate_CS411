@@ -1,7 +1,8 @@
 const axios = require('axios');
 
+const BASE_URL = 'http://localhost:5000/';
 const instance = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: BASE_URL,
 });
 
 export const getAllProfessors = () => {
@@ -12,7 +13,54 @@ export const getAllProfessors = () => {
         return null;
       },
     );
-  };
+};
+
+export const deleteProfessor = (professor_name) => {
+  return instance.delete(`professors/${professor_name}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
+export const createProfessor = (name, rating) => {
+  const requestString = `${BASE_URL}professors`;
+  console.log(requestString);
+  return axios
+    .post(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      professor_name: name,
+      avg_rating: rating
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO CREATE PROFESSOR",
+        error
+      };
+    });
+};
+
+export const editProfessor = (name, rating) => {
+  const requestString = `${BASE_URL}professors/${name}`;
+  console.log(requestString);
+  return axios
+    .put(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      avg_rating: rating
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO EDIT PROFESSOR",
+        error
+      };
+    });
+};
 
 export const getProfessorByName = (professorName) => {
     return instance.get(`professors/${professorName}`).then(
@@ -23,37 +71,3 @@ export const getProfessorByName = (professorName) => {
       },
     );
   };
-  //
-  //
-  // export const getResponseByTractID = (tract_id, year) => {
-  //   /**
-  //    * Given:
-  //    * tract id in database
-  //    *
-  //    * Returns all response rates associated to that id upon success
-  //    * Returns GET_TRACT_DATA_FAIL upon failure
-  //    */
-  //   const requestString = `${BASE_URL}rate?tract_id=${tract_id}&year=${year}`;
-  //   return axios
-  //     .get(requestString, {
-  //       headers: {
-  //         "Content-Type": "application/text"
-  //       }
-  //     })
-  //     .catch(error => {
-  //       return {
-  //         type: "GET_TRACT_DATA_FAIL",
-  //         error
-  //       };
-  //     });
-  // };
-  //
-  // export const getResponseRatesByYear = year => {
-  //   const requestString = `${BASE_URL}rate?year=${year}`;
-  //   return axios.get(requestString).catch(error => {
-  //     return {
-  //       type: "GET_TRACT_DATA_FAIL",
-  //       error
-  //     };
-  //   });
-  // };

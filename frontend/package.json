@@ -11,6 +11,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "react-search-box": "^2.0.2",
     "react-strap-table": "^1.0.6",
     "reactstrap": "^8.5.1"
   },
