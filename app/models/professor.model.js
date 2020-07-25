@@ -54,7 +54,7 @@ Professor.getAll = result => {
 Professor.updateById = (professor_name, professor, result) => {
   sql.query(
     "UPDATE professor SET avg_rating = ? WHERE professor_name = ?",
-    [professor.rating, professor_name],
+    [professor.avg_rating, professor_name],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
