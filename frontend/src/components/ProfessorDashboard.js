@@ -1,16 +1,17 @@
 import React from 'react';
 import './ProfessorDashboard.css'
 import { Button } from 'reactstrap';
+import { getAllProfessors } from '../utils/apiWrapper';
 
 export class ProfessorDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             professors: [
-                { name: 'Ben', avg_rating: 5.0 },
-                { name: 'Danielle', avg_rating: 4.7 },
-                { name: 'Andrew', avg_rating: 3.5 },
-                { name: 'Julia', avg_rating: 4.2 }
+                { professor_name: 'Ben', avg_rating: 5.0 },
+                { professor_name: 'Danielle', avg_rating: 4.7 },
+                { professor_name: 'Andrew', avg_rating: 3.5 },
+                { professor_name: 'Julia', avg_rating: 4.2 }
             ],
             newProfessor: '',
             newRating: 0,
@@ -22,13 +23,19 @@ export class ProfessorDashboard extends React.Component {
         this.updateProfessorInput = this.updateProfessorInput.bind(this);
         this.updateRatingInput = this.updateRatingInput.bind(this);
     }
+
+    async componentDidMount() {
+        const allProfessors = await getAllProfessors();
+        this.setState({ professors: allProfessors });
+
+    }
     
     addProfessor(evt) {
         evt.preventDefault();
         if (this.state.newProfessor != undefined && this.state.newRating != undefined) {
             this.setState({showDeleteError: false});
 
-            var newProf = { name: this.state.newProfessor, avg_rating: this.state.newRating }
+            var newProf = { professor_name: this.state.newProfessor, avg_rating: this.state.newRating }
             var profs = this.state.professors;
             profs.push(newProf);
 
@@ -77,7 +84,7 @@ export class ProfessorDashboard extends React.Component {
         }
 
         for (var i = 0; i < profs.length; i++) {
-            if (profs[i].name === profName) {
+            if (profs[i].professor_name === profName) {
                 profs.splice(i, 1);
                 break;
             }
@@ -94,8 +101,8 @@ export class ProfessorDashboard extends React.Component {
         if (this.state.newProfessor != undefined && this.state.newRating != undefined) {
             var profs = this.state.professors;
             for (var i = 0; i < profs.length; i++) {
-                if (profs[i].name === name) {
-                    profs[i].name = this.state.newProfessor;
+                if (profs[i].professor_name === name) {
+                    profs[i].professor_name = this.state.newProfessor;
                     profs[i].avg_rating = this.state.newRating;
                 }
             }
@@ -106,14 +113,14 @@ export class ProfessorDashboard extends React.Component {
 
     renderTableData() {
         return this.state.professors.map((professor, index) => {
-        const { name, avg_rating } = professor //destructuring
+        const { professor_name, avg_rating } = professor //destructuring
         return (
-            <tr key={name}>
-                <td> <Button id="delete" onClick={this.deleteProfessor.bind(this, name)}> Delete </Button> &nbsp;
-                     <Button id="edit" onClick={this.showEditForm.bind(this, name)}> Edit </Button> &nbsp;
-                    {name} 
-                    {(this.state.showEditForm && (this.state.professorToEdit===name)) 
-                        ? ( <form onSubmit={this.editProfessor.bind(this, name)}>
+            <tr key={professor_name}>
+                <td> <Button id="delete" onClick={this.deleteProfessor.bind(this, professor_name)}> Delete </Button> &nbsp;
+                     <Button id="edit" onClick={this.showEditForm.bind(this, professor_name)}> Edit </Button> &nbsp;
+                    {professor_name} 
+                    {(this.state.showEditForm && (this.state.professorToEdit===professor_name)) 
+                        ? ( <form onSubmit={this.editProfessor.bind(this, professor_name)}>
                                 <input type="text" onChange={this.updateProfessorInput}/>
                                 <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
                                 <input type="submit" value="Submit"/>
