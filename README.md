@@ -2,7 +2,6 @@
 
 __Run server:__  
 npm install  
-cd app    
 node server.js  
   
 __Run frontend:__  
