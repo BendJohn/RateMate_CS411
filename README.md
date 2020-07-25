@@ -1,7 +1,8 @@
 # RateMate_CS411
 
 __Run server:__  
-cd backend  
+npm install  
+cd app    
 node server.js  
   
 __Run frontend:__  

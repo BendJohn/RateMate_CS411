@@ -1,8 +1,7 @@
 import React from 'react';
 import './ProfessorDashboard.css'
 import { Button } from 'reactstrap';
-import ReactSearchBox from 'react-search-box';
-import { getAllProfessors, deleteProfessor, createProfessor } from '../utils/apiWrapper';
+import { getAllProfessors, deleteProfessor, createProfessor, getProfessorByName, editProfessor } from '../utils/apiWrapper';
 
 export class ProfessorDashboard extends React.Component {
     constructor(props) {
@@ -20,13 +19,14 @@ export class ProfessorDashboard extends React.Component {
         this.updateProfessorInput = this.updateProfessorInput.bind(this);
         this.updateRatingInput = this.updateRatingInput.bind(this);
         this.searchProfessor = this.searchProfessor.bind(this);
+        this.searchProfessorByName = this.searchProfessorByName.bind(this);
     }
 
     async componentDidMount() {
         const allProfessors = await getAllProfessors();
         this.setState({ professors: allProfessors, displayedProfessors: allProfessors });
     }
-    
+
     async addProfessor(evt) {
         evt.preventDefault();
         if (this.state.newProfessor !== undefined && this.state.newRating !== undefined) {
@@ -107,8 +107,11 @@ export class ProfessorDashboard extends React.Component {
     editProfessor(name) {
         if (this.state.newProfessor !== undefined && this.state.newRating !== undefined) {
             var profs = this.state.professors;
+            // Uncomment and update
+            // const res = await editProfessor();
             for (var i = 0; i < profs.length; i++) {
                 if (profs[i].professor_name === name) {
+                    // update these too
                     profs[i].professor_name = this.state.newProfessor;
                     profs[i].avg_rating = this.state.newRating;
                 }
@@ -117,7 +120,23 @@ export class ProfessorDashboard extends React.Component {
         }
     }
 
-    searchProfessor(evt) {
+    // Search by name ONLY
+    async searchProfessorByName(evt) {
+        evt.preventDefault();
+        if (this.state.newProfessor !== undefined) {
+            if (this.state.newProfessor === "") {
+                var profs = this.state.professors;
+                this.setState({ displayedProfessors: profs });
+                return;
+            }
+
+            const res = await getProfessorByName(this.state.newProfessor);
+            this.setState({ displayedProfessors: [{professor_name: res.professor_name, avg_rating: res.avg_rating }] });
+        }
+    }
+
+    // Search with no constraints - more useful but not really what we need for the demo
+    async searchProfessor(evt) {
         evt.preventDefault();
         if (this.state.newProfessor !== undefined) {
             var searchStr = this.state.newProfessor;
@@ -128,7 +147,6 @@ export class ProfessorDashboard extends React.Component {
                     filteredProfs.push(this.state.professors[i]);
                 }
             }
-
             this.setState({ displayedProfessors: filteredProfs })
         }
     }
@@ -145,8 +163,8 @@ export class ProfessorDashboard extends React.Component {
             <tr key={professor_name}>
                 <td> <Button id="delete" onClick={this.deleteProfessor.bind(this, professor_name)}> Delete </Button> &nbsp;
                      <Button id="edit" onClick={this.showEditForm.bind(this, professor_name)}> Edit </Button> &nbsp;
-                    {professor_name} 
-                    {(this.state.showEditForm && (this.state.professorToEdit===professor_name)) 
+                    {professor_name}
+                    {(this.state.showEditForm && (this.state.professorToEdit===professor_name))
                         ? ( <form onSubmit={this.editProfessor.bind(this, professor_name)}>
                                 <input type="text" onChange={this.updateProfessorInput}/>
                                 <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
@@ -165,7 +183,7 @@ export class ProfessorDashboard extends React.Component {
             <div>
                 <h1 id='title'>Professors</h1>
 
-                <form onSubmit={this.searchProfessor}>
+                <form onSubmit={this.searchProfessorByName}>
                     <input type="text" onChange={this.updateProfessorInput}/>
                     <input type="submit" value="Search"/>
                 </form>
@@ -176,14 +194,14 @@ export class ProfessorDashboard extends React.Component {
                         {this.renderTableData()}
                     </tbody>
                 </table>
-                
+
                 <form onSubmit={this.addProfessor}>
                     <input type="text" onChange={this.updateProfessorInput}/>
                     <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
                     <input type="submit" value="Add Professor"/>
                 </form>
 
-                {this.state.showDeleteError ? 
+                {this.state.showDeleteError ?
                     (<h3> Cannot delete. There needs to be at least 1 professor in table. </h3>) : (<> </>)}
             </div>
         )

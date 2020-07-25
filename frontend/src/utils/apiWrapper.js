@@ -45,14 +45,13 @@ export const createProfessor = (name, rating) => {
 };
 
 export const editProfessor = (name, rating) => {
-  const requestString = `${BASE_URL}professors`;
+  const requestString = `${BASE_URL}professors/${name}`;
   console.log(requestString);
   return axios
     .put(requestString, {
       headers: {
         "Content-Type": "application/json"
       },
-      professor_name: name,
       avg_rating: rating
     })
     .catch(error => {
@@ -62,3 +61,13 @@ export const editProfessor = (name, rating) => {
       };
     });
 };
+
+export const getProfessorByName = (professorName) => {
+    return instance.get(`professors/${professorName}`).then(
+      res => res.data,
+      err => {
+        console.error(err);
+        return null;
+      },
+    );
+  };
