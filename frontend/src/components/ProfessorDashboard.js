@@ -2,6 +2,7 @@ import React from 'react';
 import './ProfessorDashboard.css'
 import { Button } from 'reactstrap';
 import { getAllProfessors } from '../utils/apiWrapper';
+import { getProfessorByName } from '../utils/apiWrapper';
 
 export class ProfessorDashboard extends React.Component {
     constructor(props) {
@@ -28,8 +29,11 @@ export class ProfessorDashboard extends React.Component {
         const allProfessors = await getAllProfessors();
         this.setState({ professors: allProfessors });
 
+
+        const oneProfessor = await getProfessorByName("Bob Murphey");
+        this.setState({professors: [{professor_name: oneProfessor.professor_name, avg_rating: oneProfessor.avg_rating}]});
     }
-    
+
     addProfessor(evt) {
         evt.preventDefault();
         if (this.state.newProfessor != undefined && this.state.newRating != undefined) {
@@ -118,8 +122,8 @@ export class ProfessorDashboard extends React.Component {
             <tr key={professor_name}>
                 <td> <Button id="delete" onClick={this.deleteProfessor.bind(this, professor_name)}> Delete </Button> &nbsp;
                      <Button id="edit" onClick={this.showEditForm.bind(this, professor_name)}> Edit </Button> &nbsp;
-                    {professor_name} 
-                    {(this.state.showEditForm && (this.state.professorToEdit===professor_name)) 
+                    {professor_name}
+                    {(this.state.showEditForm && (this.state.professorToEdit===professor_name))
                         ? ( <form onSubmit={this.editProfessor.bind(this, professor_name)}>
                                 <input type="text" onChange={this.updateProfessorInput}/>
                                 <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
@@ -139,7 +143,7 @@ export class ProfessorDashboard extends React.Component {
            return <th key={index}>{key.toUpperCase()}</th>
         })
      }
-    
+
     render() {
         return (
             <div>
@@ -150,14 +154,14 @@ export class ProfessorDashboard extends React.Component {
                         {this.renderTableData()}
                     </tbody>
                 </table>
-                
+
                 <form onSubmit={this.addProfessor}>
                     <input type="text" onChange={this.updateProfessorInput}/>
                     <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
                     <input type="submit" value="Add Professor"/>
                 </form>
 
-                {this.state.showDeleteError ? 
+                {this.state.showDeleteError ?
                     (<h3> Cannot delete. There needs to be at least 1 professor in table. </h3>) : (<> </>)}
             </div>
         )
