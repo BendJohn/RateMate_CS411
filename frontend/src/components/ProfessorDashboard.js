@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProfessorDashboard.css'
+import './Table.css';
 import { Button } from 'reactstrap';
 import { getAllProfessors, deleteProfessor, createProfessor, getProfessorByName, editProfessor } from '../utils/apiWrapper';
 import { NavBar } from "./NavBar";
@@ -116,7 +116,6 @@ export class ProfessorDashboard extends React.Component {
         this.setState({displayedProfessors: profs});
     }
 
-    // Search by name ONLY
     async searchProfessorByName(evt) {
         evt.preventDefault();
         if (this.state.newProfessor !== undefined) {
@@ -172,7 +171,7 @@ export class ProfessorDashboard extends React.Component {
                     <input type="submit" value="Search"/>
                 </form>
 
-                <table id='professors'>
+                <table id='table'>
                     <tbody>
                         <tr> <th> Professor Name </th> <th> Rating </th> </tr>
                         {this.renderTableData()}

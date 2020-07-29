@@ -3,7 +3,7 @@ text-align: center;
 font-family: arial, sans-serif;
 }
 
-#professors {
+#table {
 text-align: center;
 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 border-collapse: collapse;
@@ -11,16 +11,16 @@ border: 3px solid #ddd;
 width: 100%;
 }
 
-#professors td, #professors th {
+#table td, #table th {
 border: 1px solid #ddd;
 padding: 8px;
 }
 
-#professors tr:nth-child(even){background-color: #f2f2f2;}
+#table tr:nth-child(even){background-color: #f2f2f2;}
 
-#professors tr:hover {background-color: #ddd;}
+#table tr:hover {background-color: #ddd;}
 
-#professors th {
+#table th {
 padding-top: 12px;
 padding-bottom: 12px;
 text-align: center;
