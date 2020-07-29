@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import { ProfessorDashboard } from './components/ProfessorDashboard'
+import Routes from "./utils/Routes";
 
 export class App extends React.Component {
   render() {
     return (
       <>
-          <ProfessorDashboard/>
+          <Routes/>
       </>
     )
   }

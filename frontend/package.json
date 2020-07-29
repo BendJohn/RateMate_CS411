@@ -11,6 +11,7 @@
     "concurrently": "^5.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-search-box": "^2.0.2",
     "react-strap-table": "^1.0.6",

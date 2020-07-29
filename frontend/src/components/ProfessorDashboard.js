@@ -2,6 +2,8 @@ import React from 'react';
 import './ProfessorDashboard.css'
 import { Button } from 'reactstrap';
 import { getAllProfessors, deleteProfessor, createProfessor, getProfessorByName, editProfessor } from '../utils/apiWrapper';
+import { NavBar } from "./NavBar";
+
 
 export class ProfessorDashboard extends React.Component {
     constructor(props) {
@@ -162,6 +164,7 @@ export class ProfessorDashboard extends React.Component {
     render() {
         return (
             <div>
+                <NavBar/>
                 <h1 id='title'>Professors</h1>
 
                 <form onSubmit={this.searchProfessorByName}>
