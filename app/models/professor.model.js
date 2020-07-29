@@ -20,7 +20,7 @@ Professor.create = (newProfessor, result) => {
 };
 
 Professor.findById = (professorName, result) => {
-  sql.query(`SELECT * FROM professor WHERE professor_name = '${professorName}'`, (err, res) => {
+  sql.query(`SELECT * FROM professor WHERE professor_name LIKE '%${professorName}%'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -28,8 +28,8 @@ Professor.findById = (professorName, result) => {
     }
 
     if (res.length) {
-      console.log("found professor: ", res[0]);
-      result(null, res[0]);
+      console.log("found professor: ", res);
+      result(null, res);
       return;
     }
 

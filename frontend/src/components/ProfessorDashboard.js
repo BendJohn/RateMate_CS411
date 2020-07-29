@@ -18,7 +18,6 @@ export class ProfessorDashboard extends React.Component {
         this.addProfessor = this.addProfessor.bind(this);
         this.updateProfessorInput = this.updateProfessorInput.bind(this);
         this.updateRatingInput = this.updateRatingInput.bind(this);
-        this.searchProfessor = this.searchProfessor.bind(this);
         this.searchProfessorByName = this.searchProfessorByName.bind(this);
     }
 
@@ -104,20 +103,15 @@ export class ProfessorDashboard extends React.Component {
         this.setState({ showEditForm: true, professorToEdit: profName });
     }
 
-    editProfessor(name) {
-        if (this.state.newProfessor !== undefined && this.state.newRating !== undefined) {
-            var profs = this.state.professors;
-            // Uncomment and update
-            // const res = await editProfessor();
-            for (var i = 0; i < profs.length; i++) {
-                if (profs[i].professor_name === name) {
-                    // update these too
-                    profs[i].professor_name = this.state.newProfessor;
-                    profs[i].avg_rating = this.state.newRating;
-                }
+    async editProfessor(profName) {
+        await editProfessor(profName, this.state.newRating);
+        for (var i = 0; i < this.state.professors.length; i++) {
+            if (this.state.professors[i].professor_name === profName) {
+                this.state.professors[i].avg_rating = this.state.newRating;
             }
-            this.setState({ professors: profs, displayedProfessors: profs });
         }
+        const profs = this.state.professors;
+        this.setState({displayedProfessors: profs});
     }
 
     // Search by name ONLY
@@ -131,26 +125,14 @@ export class ProfessorDashboard extends React.Component {
             }
 
             const res = await getProfessorByName(this.state.newProfessor);
-            this.setState({ displayedProfessors: [{professor_name: res.professor_name, avg_rating: res.avg_rating }] });
-        }
-    }
-
-    // Search with no constraints - more useful but not really what we need for the demo
-    async searchProfessor(evt) {
-        evt.preventDefault();
-        if (this.state.newProfessor !== undefined) {
-            var searchStr = this.state.newProfessor;
-            var filteredProfs = [];
-
-            for (var i = 0; i < this.state.professors.length; i++) {
-                if (this.state.professors[i].professor_name.toLowerCase().includes(searchStr.toLowerCase())) {
-                    filteredProfs.push(this.state.professors[i]);
-                }
+            
+            var displayed = [];
+            for (var i = 0; i < res.length; i++) {
+                displayed.push({professor_name: res[i].professor_name, avg_rating: res[i].avg_rating })
             }
-            this.setState({ displayedProfessors: filteredProfs })
+            this.setState({ displayedProfessors: displayed});
         }
     }
-
 
     renderTableData() {
         if (this.state.displayedProfessors.length === 0) {
@@ -162,11 +144,10 @@ export class ProfessorDashboard extends React.Component {
         return (
             <tr key={professor_name}>
                 <td> <Button id="delete" onClick={this.deleteProfessor.bind(this, professor_name)}> Delete </Button> &nbsp;
-                     <Button id="edit" onClick={this.showEditForm.bind(this, professor_name)}> Edit </Button> &nbsp;
+                     <Button id="edit" onClick={this.showEditForm.bind(this, professor_name)}> Edit Rating </Button> &nbsp;
                     {professor_name}
                     {(this.state.showEditForm && (this.state.professorToEdit===professor_name))
                         ? ( <form onSubmit={this.editProfessor.bind(this, professor_name)}>
-                                <input type="text" onChange={this.updateProfessorInput}/>
                                 <input type="number" id="rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRatingInput}/>
                                 <input type="submit" value="Submit"/>
                             </form>

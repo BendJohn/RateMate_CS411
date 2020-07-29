@@ -46,7 +46,6 @@ export const createProfessor = (name, rating) => {
 
 export const editProfessor = (name, rating) => {
   const requestString = `${BASE_URL}professors/${name}`;
-  console.log(requestString);
   return axios
     .put(requestString, {
       headers: {
