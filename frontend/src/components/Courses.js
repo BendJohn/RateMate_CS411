@@ -51,7 +51,18 @@ export class Courses extends React.Component {
                     prerequisites: "222"
                 }
             ],
-            enrollments: ["props from course"],
+            enrollments: [
+                {
+                    professor_name: "John Smith", 
+                    CRN: 123, 
+                    name: "Intro to CS",
+                    comments: "Comments!", 
+                    availability: true,
+                    avgGpa: 3.33,
+                    requirements_filled: "Science Gen Ed",
+                    prerequisites: "123"
+                },
+            ],
             newCourse: "",
         };
 
@@ -73,6 +84,7 @@ export class Courses extends React.Component {
 
     // async componentDidMount() {
     //     const allCourses = await getallCourses();
+    //     const enrollments = await getAllEnrollments(); // get all enrollments
     //     this.setState({ courses: allCourses, displayedCourses: allCourses });
     // }
 
@@ -99,6 +111,15 @@ export class Courses extends React.Component {
         }
     }
 
+
+    async addEnrollment(course) {
+        // await addEnrollment();
+        var oldEnrollments = this.state.enrollments;
+        oldEnrollments.push(course);
+        this.setState({ enrollments: oldEnrollments });
+        console.log(this.state.enrollments);
+    }
+
     renderTableData() {
         if (this.state.displayedCourses.length === 0) {
             return;
@@ -109,7 +130,7 @@ export class Courses extends React.Component {
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="delete"> Enroll </Button> &nbsp;
+                    <Button id="enroll" onClick={this.addEnrollment.bind(this, course)}> Enroll </Button> &nbsp;
                     {CRN}
                 </td>
                 <td>{name} </td>

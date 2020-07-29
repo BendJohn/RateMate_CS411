@@ -23,11 +23,28 @@ export class Enrollments extends React.Component {
     }
 
     async componentDidMount() {
+        // get all enrollments
         if (this.props.location.state.enrollments) {
             this.setState({
                 enrollments: this.props.location.state.enrollments
             })
         }
+    }
+
+    
+    async deleteEnrollment(course) {
+        var enrolls = this.state.enrollments;
+
+        for (var i = 0; i < enrolls.length; i++) {
+            if (enrolls[i].CRN === course.CRN) {
+                // await deleteProfessor(profs[i].professor_name);
+                enrolls.splice(i, 1);
+                break;
+            }
+        }
+
+        var newEnrolls = this.state.enrollments;
+        this.setState({ enrollments: newEnrolls });
     }
 
     renderTableData() {
@@ -40,7 +57,7 @@ export class Enrollments extends React.Component {
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="delete"> Enroll </Button> &nbsp;
+                    <Button id="delete" onClick={this.deleteEnrollment.bind(this,course)}> Unenroll </Button> &nbsp;
                     {CRN}
                 </td>
                 <td>{name} </td>

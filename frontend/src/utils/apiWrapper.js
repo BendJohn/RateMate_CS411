@@ -27,7 +27,6 @@ export const deleteProfessor = (professor_name) => {
 
 export const createProfessor = (name, rating) => {
   const requestString = `${BASE_URL}professors`;
-  console.log(requestString);
   return axios
     .post(requestString, {
       headers: {

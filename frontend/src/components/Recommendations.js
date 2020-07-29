@@ -29,8 +29,31 @@ export class Recommendations extends React.Component {
                     prerequisites: "222"
                 }
             ],
-            enrollments: ["props passed from recommendations"]
+            enrollments: [
+                {
+                    professor_name: "John Smith", 
+                    CRN: 123, 
+                    name: "Intro to CS",
+                    comments: "Comments!", 
+                    availability: true,
+                    avgGpa: 3.33,
+                    requirements_filled: "Science Gen Ed",
+                    prerequisites: "123"
+                },
+            ]
         };
+    }
+
+    // async componentDidMount() {
+    //     // get all enrollments
+    // }
+
+    async addEnrollment(course) {
+        // await addEnrollment();
+        var oldEnrollments = this.state.enrollments;
+        oldEnrollments.push(course);
+        this.setState({ enrollments: oldEnrollments });
+        console.log(this.state.enrollments);
     }
 
     renderTableData() {
@@ -43,7 +66,7 @@ export class Recommendations extends React.Component {
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="delete"> Enroll </Button> &nbsp;
+                    <Button id="enroll" onClick={this.addEnrollment.bind(this, course)}> Enroll </Button> &nbsp;
                     {CRN}
                 </td>
                 <td>{name} </td>
