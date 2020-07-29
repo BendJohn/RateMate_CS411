@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.21, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ratemate
 -- ------------------------------------------------------
@@ -86,7 +86,7 @@ CREATE TABLE `professor` (
 
 LOCK TABLES `professor` WRITE;
 /*!40000 ALTER TABLE `professor` DISABLE KEYS */;
-INSERT INTO `professor` VALUES ('Abdussalam Alawini',4.9),('Bob Murphey',4.5),('Jose Vazquez',3.5),('Karle Flanagan',5.0),('Werner Baer',3.2);
+INSERT INTO `professor` VALUES ('Abdu Alawini',4.5),('Ben John',3.4),('Geoffrey Challen',4.5),('John Smith',4.4),('Taylor Swift',3.0);
 /*!40000 ALTER TABLE `professor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +114,6 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES ('Abdussalam Alawini','fa2019',72358);
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-22 21:29:12
+-- Dump completed on 2020-07-28 21:36:27
