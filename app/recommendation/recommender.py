@@ -8,7 +8,7 @@ from scipy import sparse
 # LOAD THE DATASET
 #------------------
 
-data = pd.read_csv('courses.csv')
+data = pd.read_csv('../data/courses.csv')
 
 # Create a new dataframe without the user ids.
 data_items = data.drop('user', 1)
