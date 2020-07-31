@@ -23,12 +23,15 @@ DROP TABLE IF EXISTS `course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course` (
-  `CRN` int NOT NULL,
-  `comments` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `availability` tinyint(1) DEFAULT NULL,
-  `avgGpa` float DEFAULT NULL,
-  `requirements_filled` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`CRN`)
+  `subject` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `number` int NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(600) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `credit` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `info` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `attributes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `schedule_info` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`subject`,`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,7 +41,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (72358,'',1,3.2,'');
+INSERT INTO `course` VALUES ('CS',411,'Database Systems','Examination of the logical organization of databases: the entity-relationship model; the hierarchical, network, and relational data models and their languages. Functional dependencies and normal forms. Design, implementation, and optimization of query languages; security and integrity; concurrency control, and distributed database systems. 3 undergraduate hours. 3 or 4 graduate hours. Prerequisite: CS 225.','3 OR 4 hours.','3 undergraduate hours. 3 or 4 graduate hours. Prerequisite: CS 225.','','');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +53,7 @@ DROP TABLE IF EXISTS `enrollments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enrollments` (
-  `netid` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `netid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `CRN` int NOT NULL,
   PRIMARY KEY (`netid`,`CRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -62,7 +65,7 @@ CREATE TABLE `enrollments` (
 
 LOCK TABLES `enrollments` WRITE;
 /*!40000 ALTER TABLE `enrollments` DISABLE KEYS */;
-INSERT INTO `enrollments` VALUES ('dy6',72358);
+INSERT INTO `enrollments` VALUES ('dy6',30109);
 /*!40000 ALTER TABLE `enrollments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,9 +77,10 @@ DROP TABLE IF EXISTS `professor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `professor` (
-  `professor_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `firstname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `avg_rating` decimal(2,1) DEFAULT NULL,
-  PRIMARY KEY (`professor_name`)
+  PRIMARY KEY (`firstname`,`lastname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +90,7 @@ CREATE TABLE `professor` (
 
 LOCK TABLES `professor` WRITE;
 /*!40000 ALTER TABLE `professor` DISABLE KEYS */;
-INSERT INTO `professor` VALUES ('Abdu Alawini',4.5),('Ben John',3.4),('Geoffrey Challen',4.5),('John Smith',4.4),('Taylor Swift',3.0);
+INSERT INTO `professor` VALUES ('Abdussalam A','Alawini',4.9);
 /*!40000 ALTER TABLE `professor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,13 +102,28 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `professor_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `semester` varchar(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CRN` int DEFAULT NULL,
-  KEY `professor_name` (`professor_name`),
-  KEY `CRN` (`CRN`),
-  CONSTRAINT `section_ibfk_1` FOREIGN KEY (`professor_name`) REFERENCES `professor` (`professor_name`) ON DELETE CASCADE,
-  CONSTRAINT `section_ibfk_2` FOREIGN KEY (`CRN`) REFERENCES `course` (`CRN`) ON DELETE CASCADE
+  `subject` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `number` int DEFAULT NULL,
+  `CRN` int NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sched_type` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Ap` int DEFAULT NULL,
+  `A` int DEFAULT NULL,
+  `Am` int DEFAULT NULL,
+  `Bp` int DEFAULT NULL,
+  `B` int DEFAULT NULL,
+  `Bm` int DEFAULT NULL,
+  `Cp` int DEFAULT NULL,
+  `C` int DEFAULT NULL,
+  `Cm` int DEFAULT NULL,
+  `Dp` int DEFAULT NULL,
+  `D` int DEFAULT NULL,
+  `Dm` int DEFAULT NULL,
+  `F` int DEFAULT NULL,
+  `W` int DEFAULT NULL,
+  `avg_gpa` decimal(3,2) DEFAULT NULL,
+  `professor_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`CRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,6 +133,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
+INSERT INTO `section` VALUES ('CS',411,30109,'Database Systems','LCD',43,88,24,20,8,8,1,1,0,1,0,0,0,0,3.77,'Alawini, Abdussalam A'),('AAS',100,41758,'Intro Asian American Studies','DIS',20,6,1,4,1,0,0,0,0,0,0,0,0,0,3.87,'Boonsripaisal, Simon');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,8 +145,10 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `netid` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `standing` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `netid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `standing` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `department` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`netid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -137,7 +159,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('dy6','junior');
+INSERT INTO `user` VALUES ('ahchao3','Andrew Chao','junior','CS'),('dy6','Danielle Yang','junior','CS'),('juliagw2','Julia Wisowaty','graduate','PSYC');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -150,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-28 21:36:27
+-- Dump completed on 2020-07-31  0:11:58
