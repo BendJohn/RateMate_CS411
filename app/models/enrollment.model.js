@@ -31,7 +31,7 @@ Enrollment.create = (newEnrollment, result) => {
 
 // Find all the enrollments that  belong to user identified by their netid
 Enrollment.findById = (netid, result) => {
-  sql.query(`SELECT * FROM enrollments WHERE netid='${netid}'`, (err, res) => {
+  sql.query(`SELECT e.netid, s.subject, s.number, s.crn FROM enrollments e NATURAL JOIN section s WHERE e.netid='${netid}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
