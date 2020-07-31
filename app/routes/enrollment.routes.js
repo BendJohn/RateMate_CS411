@@ -5,17 +5,17 @@ module.exports = app => {
     app.post("/enrollments", enrollments.create);
 
     // Retrieve all Enrollments
-    app.get("/enrollments", enrollments.findAll);
+    //app.get("/enrollments", enrollments.findAll);
 
     // Retrieve a single Enrollment with enrollmentName
-    app.get("/enrollments/:enrollmentName", enrollments.findOne);
+    app.get("/enrollments/:netid", enrollments.findOne);
 
     // Update a Enrollment with enrollmentName
-    app.put("/enrollments/:enrollmentName", enrollments.update);
+    //app.put("/enrollments/:netid", enrollments.update);
 
     // Delete a Enrollment with enrollmentId
-    app.delete("/enrollments/:enrollmentName", enrollments.delete);
+    app.delete("/enrollments/:netid/:crn", enrollments.delete);
 
-    // Create a new Enrollment
-    app.delete("/enrollments", enrollments.deleteAll);
+    // Delete all Enrollment
+    //app.delete("/enrollments", enrollments.deleteAll);
   };

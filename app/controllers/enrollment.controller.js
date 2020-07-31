@@ -43,15 +43,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Enrollment with a enrollmentId
 exports.findOne = (req, res) => {
-    Enrollment.findById(req.params.enrollmentName, (err, data) => {
+    Enrollment.findById(req.params.netid, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
-              message: `Not found Enrollment with id ${req.params.enrollmentName}.`
+              message: `Not found Enrollment with net id ${req.params.netid}.`
             });
           } else {
             res.status(500).send({
-              message: "Error retrieving Enrollment with id " + req.params.enrollmentName
+              message: "Error retrieving Enrollment with net id " + req.params.netid
             });
           }
         } else res.send(data);
@@ -88,18 +88,18 @@ exports.update = (req, res) => {
 
 // Delete a Enrollment with the specified enrollmentId in the request
 exports.delete = (req, res) => {
-    Enrollment.remove(req.params.enrollmentName, (err, data) => {
+    Enrollment.remove(req.params.netid, req.params.crn, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
-              message: `Not found Enrollment with name ${req.params.enrollmentName}.`
+              message: `Not found Enrollment with name ${req.params.netid}.`
             });
           } else {
             res.status(500).send({
-              message: "Could not delete Enrollment with name " + req.params.enrollmentName
+              message: "Could not delete Enrollment with name " + req.params.netid
             });
           }
-        } else res.send({ message: `Enrollment ${req.params.enrollmentName} was deleted successfully!` });
+        } else res.send({ message: `Enrollment (${req.params.netid}, ${req.params.crn}) was deleted successfully!` });
       });
 };
 

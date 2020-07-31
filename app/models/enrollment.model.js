@@ -16,7 +16,7 @@ Enrollment.create = (newEnrollment, result) => {
     if (newEnrollment.name != undefined && newEnrollment.standing != undefined && newEnrollment.department != undefined) {
         sql_query = `INSERT INTO user VALUES('${newEnrollment.netid}','${newEnrollment.name}','${newEnrollment.standing}','${newEnrollment.department}'); ` + sql_query;
     }
-    
+
   sql.query(sql_query, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -29,22 +29,19 @@ Enrollment.create = (newEnrollment, result) => {
   });
 };
 
-Enrollment.findById = (enrollmentName, result) => {
-  sql.query(`SELECT * FROM enrollments WHERE enrollment_name LIKE '%${enrollmentName}%'`, (err, res) => {
+// Find all the enrollments that  belong to user identified by their netid
+Enrollment.findById = (netid, result) => {
+  sql.query(`SELECT * FROM enrollments WHERE netid='${netid}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    if (res.length) {
-      console.log("found enrollment: ", res);
-      result(null, res);
-      return;
-    }
 
-    // not found Enrollment with the id
-    result({ kind: "not_found" }, null);
+    console.log("found enrollment: ", res);
+    result(null, res);
+    return;
   });
 };
 
@@ -84,8 +81,8 @@ Enrollment.updateById = (enrollment_name, enrollment, result) => {
   );
 };
 
-Enrollment.remove = (enrollment_name, result) => {
-  sql.query(`DELETE FROM enrollments WHERE enrollment_name = '${enrollment_name}'`, (err, res) => {
+Enrollment.remove = (netid, crn, result) => {
+  sql.query(`DELETE FROM enrollments WHERE netid='${netid}' AND CRN='${crn}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -98,7 +95,7 @@ Enrollment.remove = (enrollment_name, result) => {
       return;
     }
 
-    console.log("deleted enrollment with name: ", enrollment_name);
+    console.log(`deleted enrollment with name: (${netid},${crn})`);
     result(null, res);
   });
 };
