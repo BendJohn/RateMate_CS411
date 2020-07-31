@@ -26,7 +26,7 @@ BasicSearch.findByCrn = (crn, basicSearch, result) => {
 
 BasicSearch.findNoCrn = (basicSearch, result) => {
   // Add search parameters if they are not undefined
-  var search_query = "SELECT c.subject, c.number, c.name, c.description, s.avg_gpa, p.firstname, p.lastname, p.avg_rating FROM course c NATURAL JOIN section s, professor p WHERE s.professor_name LIKE CONCAT(p.lastname,'%')";
+  var search_query = "SELECT c.subject, c.number, c.name, c.description, s.CRN, s.avg_gpa, p.firstname, p.lastname, p.avg_rating FROM course c NATURAL JOIN section s, professor p WHERE s.professor_name LIKE CONCAT(p.lastname,'%')";
   
   if (basicSearch.subject != undefined) {
     search_query += ` AND c.subject='${basicSearch.subject}'`;
@@ -41,8 +41,6 @@ BasicSearch.findNoCrn = (basicSearch, result) => {
     search_query += ` AND c.description LIKE '%${basicSearch.keyword}%'`;
   }
   if (basicSearch.prof_lastname != undefined) {
-    // basicSearch.prof_lastname = JSON.stringify(basicSearch.prof_lastname).toLowerCase();
-    // basicSearch.prof_lastname = basicSearch.prof_lastname.charAt(0).toUpperCase() + basicSearch.prof_lastname.slice(1);
     search_query += ` AND p.lastname='${basicSearch.prof_lastname}'`;
   }
   if (basicSearch.rtg_lower != undefined) {
