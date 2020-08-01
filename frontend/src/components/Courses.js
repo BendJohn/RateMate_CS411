@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavBar } from './NavBar';
-import { Button, Nav } from 'reactstrap';
+import { Button } from 'reactstrap';
 import './Table.css';
 
 export class Courses extends React.Component {

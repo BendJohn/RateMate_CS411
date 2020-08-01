@@ -17,11 +17,11 @@ export class NavBar extends React.Component {
         <Button onClick={() => history.push({pathname: '/'})}> Professor Dashboard </Button>
         <Button onClick={() => history.push({pathname: '/Courses'})}> Courses </Button>
         <Button onClick={() => history.push({pathname: '/Recommendations'})}> Recommendations </Button>
-        <Button onClick={() => history.push(
+        {/* <Button onClick={() => history.push(
             { pathname: '/Enrollments', 
               state: {
               enrollments: this.state.enrollments,
-            }})}> Enrollments </Button>
+            }})}> Enrollments </Button> */}
       </>
     )
   }

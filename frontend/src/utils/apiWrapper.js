@@ -5,6 +5,22 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
+
+export const getEnrollmentsByNetID = (netID) => {
+  return instance.get(`enrollments/${netID}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
+
+
+
+// Professors (kind of broken)
+
 export const getAllProfessors = () => {
     return instance.get('professors').then(
       res => res.data,
@@ -32,7 +48,8 @@ export const createProfessor = (name, rating) => {
       headers: {
         "Content-Type": "application/json"
       },
-      professor_name: name,
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ")[1],
       avg_rating: rating
     })
     .catch(error => {

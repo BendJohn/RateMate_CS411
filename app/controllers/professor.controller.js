@@ -11,7 +11,8 @@ exports.create = (req, res) => {
 
   // Create a Professor
     const professor = new Professor({
-        professor_name: req.body.professor_name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         avg_rating: req.body.avg_rating
     });
 
