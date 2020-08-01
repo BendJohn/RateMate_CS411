@@ -1,102 +1,135 @@
+import sys
+import mysql.connector
+
 import pandas as pd
 import numpy as np
 
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 
-#------------------
-# LOAD THE DATASET
-#------------------
+#--------------------
+# Prerequisite Graph
+#--------------------
 
-data = pd.read_csv('../data/courses.csv')
+def prerequisite():
+    pass
 
-# Create a new dataframe without the user ids.
-data_items = data.drop('user', 1)
+#----------------------------------
+# Nearest Neighbors Recommendation
+#----------------------------------
 
-#------------------------
-# ITEM-ITEM CALCULATIONS
-#------------------------
+def nearestNeighbors():
+    data = pd.read_csv('./app/data/courses.csv')
 
-# As a first step we normalize the user vectors to unit vectors.
+    # Create a new dataframe without the user ids.
+    data_items = data.drop('user', 1)
 
-# magnitude = sqrt(x2 + y2 + z2 + ...)
-magnitude = np.sqrt(np.square(data_items).sum(axis=1))
+    #------------------------
+    # ITEM-ITEM CALCULATIONS
+    #------------------------
 
-# unitvector = (x / magnitude, y / magnitude, z / magnitude, ...)
-data_items = data_items.divide(magnitude, axis='index')
+    # As a first step we normalize the user vectors to unit vectors.
 
-def calculate_similarity(data_items):
-    """Calculate the column-wise cosine similarity for a sparse
-    matrix. Return a new dataframe matrix with similarities.
-    """
-    data_sparse = sparse.csr_matrix(data_items)
-    similarities = cosine_similarity(data_sparse.transpose())
-    sim = pd.DataFrame(data=similarities, index= data_items.columns, columns= data_items.columns)
-    return sim
+    # magnitude = sqrt(x2 + y2 + z2 + ...)
+    magnitude = np.sqrt(np.square(data_items).sum(axis=1))
 
-# Build the similarity matrix
-data_matrix = calculate_similarity(data_items)
+    # unitvector = (x / magnitude, y / magnitude, z / magnitude, ...)
+    data_items = data_items.divide(magnitude, axis='index')
 
-# Lets get the top 11 similar artists for Beyonce
-# print(data_matrix.loc['beyonce'].nlargest(11))
+    def calculate_similarity(data_items):
+        """Calculate the column-wise cosine similarity for a sparse
+        matrix. Return a new dataframe matrix with similarities.
+        """
+        data_sparse = sparse.csr_matrix(data_items)
+        similarities = cosine_similarity(data_sparse.transpose())
+        sim = pd.DataFrame(data=similarities, index= data_items.columns, columns= data_items.columns)
+        return sim
 
-#---------------------------
-# USER-ITEM CALCULATIONS V1
-#---------------------------
+    # Build the similarity matrix
+    data_matrix = calculate_similarity(data_items)
 
-# user = 5985 # The id of the user for whom we want to generate recommendations
-# user_index = data[data.user == user].index.tolist()[0] # Get the frame index
+    # Lets get the top 11 similar artists for Beyonce
+    # print(data_matrix.loc['beyonce'].nlargest(11))
 
-# # Get the artists the user has likd.
-# known_user_likes = data_items.ix[user_index]
-# known_user_likes = known_user_likes[known_user_likes >0].index.values
+    #---------------------------
+    # USER-ITEM CALCULATIONS V1
+    #---------------------------
 
-# # Users likes for all items as a sparse vector.
-# user_rating_vector = data_items.ix[user_index]
+    # user = 5985 # The id of the user for whom we want to generate recommendations
+    # user_index = data[data.user == user].index.tolist()[0] # Get the frame index
 
-# # Calculate the score.
-# score = data_matrix.dot(user_rating_vector).div(data_matrix.sum(axis=1))
+    # # Get the artists the user has likd.
+    # known_user_likes = data_items.ix[user_index]
+    # known_user_likes = known_user_likes[known_user_likes >0].index.values
 
-# # Remove the known likes from the recommendation.
-# score = score.drop(known_user_likes)
+    # # Users likes for all items as a sparse vector.
+    # user_rating_vector = data_items.ix[user_index]
 
-# # Print the known likes and the top 20 recommendations.
-# print(known_user_likes)
-# print(score.nlargest(20))
+    # # Calculate the score.
+    # score = data_matrix.dot(user_rating_vector).div(data_matrix.sum(axis=1))
 
-#---------------------------
-# USER-ITEM CALCULATIONS V2
-#---------------------------
+    # # Remove the known likes from the recommendation.
+    # score = score.drop(known_user_likes)
 
-# Construct a new dataframe with the 10 closest neighbors (most similar)
-# for each artist.
-data_neighbors = pd.DataFrame(index=data_matrix.columns, columns=range(1,11))
-for i in range(0, len(data_matrix.columns)):
-    data_neighbors.iloc[i,:10] = data_matrix.iloc[0:,i].sort_values(ascending=False)[:10].index
+    # # Print the known likes and the top 20 recommendations.
+    # print(known_user_likes)
+    # print(score.nlargest(20))
 
-user = 5985
-user_index = data[data.user == user].index.tolist()[0]
+    #---------------------------
+    # USER-ITEM CALCULATIONS V2
+    #---------------------------
 
-# Get the artists the user has played.
-known_user_likes = data_items.iloc[user_index]
-known_user_likes = known_user_likes[known_user_likes >0].index.values
+    # Construct a new dataframe with the 10 closest neighbors (most similar)
+    # for each artist.
+    data_neighbors = pd.DataFrame(index=data_matrix.columns, columns=range(1,11))
+    for i in range(0, len(data_matrix.columns)):
+        data_neighbors.iloc[i,:10] = data_matrix.iloc[0:,i].sort_values(ascending=False)[:10].index
 
-# Construct the neighborhood from the most similar items to the
-# ones our user has already liked.
-most_similar_to_likes = data_neighbors.loc[known_user_likes]
-similar_list = most_similar_to_likes.values.tolist()
-similar_list = list(set([item for sublist in similar_list for item in sublist]))
-neighborhood = data_matrix[similar_list].loc[similar_list]
+    user = 5985
+    user_index = data[data.user == user].index.tolist()[0]
 
-# A user vector containing only the neighborhood items and
-# the known user likes.
-user_vector = data_items.iloc[user_index].loc[similar_list]
+    # Get the artists the user has played.
+    known_user_likes = data_items.iloc[user_index]
+    known_user_likes = known_user_likes[known_user_likes >0].index.values
 
-# Calculate the score.
-score = neighborhood.dot(user_vector).div(neighborhood.sum(axis=1))
+    # Construct the neighborhood from the most similar items to the
+    # ones our user has already liked.
+    most_similar_to_likes = data_neighbors.loc[known_user_likes]
+    similar_list = most_similar_to_likes.values.tolist()
+    similar_list = list(set([item for sublist in similar_list for item in sublist]))
+    neighborhood = data_matrix[similar_list].loc[similar_list]
 
-# Drop the known likes.
-score = score.drop(known_user_likes)
+    # A user vector containing only the neighborhood items and
+    # the known user likes.
+    user_vector = data_items.iloc[user_index].loc[similar_list]
 
-print(known_user_likes)
-print(score.nlargest(20))
+    # Calculate the score.
+    score = neighborhood.dot(user_vector).div(neighborhood.sum(axis=1))
+
+    # Drop the known likes.
+    score = score.drop(known_user_likes)
+
+    # print(known_user_likes)
+    score = score.nlargest(20).to_frame().index
+    print(list(score))
+
+
+#--------------------
+# Choose Recommender
+#--------------------
+
+# Run SQL query to find out how many unique users there are\import mysql.connector
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="dbspass1234",
+  database="ratemate"
+)
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT * FROM user")
+myresult = mycursor.fetchall()
+if len(myresult) > 100:
+    prerequisite()
+else:
+    nearestNeighbors()
