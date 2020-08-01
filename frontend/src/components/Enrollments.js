@@ -28,11 +28,10 @@ export class Enrollments extends React.Component {
     async getAllEnrollmentsByNetID(evt) {
         evt.preventDefault();
         if (this.state.netid !== undefined) {
-            if (this.state.newProfessor === "") {
+            if (this.state.netid === "") {
                 this.setState({ enrollments: [] });
                 return;
             }
-
             const res = await getEnrollmentsByNetID(this.state.netid);
             this.setState({ enrollments: res });
         }
@@ -53,22 +52,24 @@ export class Enrollments extends React.Component {
     }
 
     renderTableData() {
-        if (this.state.enrollments.length === 0) {
-            return;
+        if (this.state.enrollments !== null) {
+            if (this.state.enrollments.length === 0) {
+                return;
+            }
+    
+            return this.state.enrollments.map((enrollment, index) => {
+            const { subject, number, crn } = enrollment //destructuring
+            return (
+                <tr key={crn}>
+                    <td> 
+                        <Button id="delete" onClick={this.deleteEnrollment.bind(this,enrollment)}> Unenroll </Button> &nbsp;
+                        {crn}
+                    </td>
+                    <td>{subject} </td>
+                    <td>{number} </td>
+                </tr>
+            )})
         }
-
-        return this.state.enrollments.map((enrollment, index) => {
-        const { subject, number, crn } = enrollment //destructuring
-        return (
-            <tr key={crn}>
-                <td> 
-                    <Button id="delete" onClick={this.deleteEnrollment.bind(this,enrollment)}> Unenroll </Button> &nbsp;
-                    {crn}
-                </td>
-                <td>{subject} </td>
-                <td>{number} </td>
-            </tr>
-        )})
     }
 
     render() {
