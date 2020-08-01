@@ -6,8 +6,8 @@ const instance = axios.create({
 });
 
 
-export const getEnrollmentsByNetID = (netID) => {
-  return instance.get(`enrollments/${netID}`).then(
+export const getEnrollmentsByNetID = (netid) => {
+  return instance.get(`enrollments/${netid}`).then(
     res => res.data,
     err => {
       console.error(err);
@@ -16,7 +16,33 @@ export const getEnrollmentsByNetID = (netID) => {
   );
 };
 
+export const deleteEnrollment = (netid, crn) => {
+  return instance.delete(`enrollments/${netid}/${crn}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
 
+export const addEnrollment = (netID, CRN) => {
+  const requestString = `${BASE_URL}enrollments`;
+  return axios
+    .post(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      netid: netID,
+      crn: CRN
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO CREATE PROFESSOR",
+        error
+      };
+    });
+};
 
 
 // Professors (kind of broken)
