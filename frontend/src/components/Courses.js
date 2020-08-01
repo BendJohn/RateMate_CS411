@@ -2,6 +2,7 @@ import React from 'react';
 import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
 import './Table.css';
+import { addEnrollment } from '../utils/apiWrapper';
 
 export class Courses extends React.Component {
     constructor(props) {
@@ -10,7 +11,7 @@ export class Courses extends React.Component {
             courses: [
                 {
                     professor_name: "John Smith", 
-                    CRN: 123, 
+                    CRN: 41758, 
                     name: "Intro to CS",
                     comments: "Comments!", 
                     availability: true,
@@ -32,7 +33,7 @@ export class Courses extends React.Component {
             displayedCourses: [
                 {
                     professor_name: "John Smith", 
-                    CRN: 123, 
+                    CRN: 41758, 
                     name: "Intro to CS",
                     comments: "Comments!", 
                     availability: true,
@@ -51,19 +52,9 @@ export class Courses extends React.Component {
                     prerequisites: "222"
                 }
             ],
-            enrollments: [
-                {
-                    professor_name: "John Smith", 
-                    CRN: 123, 
-                    name: "Intro to CS",
-                    comments: "Comments!", 
-                    availability: true,
-                    avgGpa: 3.33,
-                    requirements_filled: "Science Gen Ed",
-                    prerequisites: "123"
-                },
-            ],
             newCourse: "",
+            showForm: false,
+            crnToEdit: 0
         };
 
         this.updateInput = this.updateInput.bind(this);
@@ -81,12 +72,6 @@ export class Courses extends React.Component {
             newCourse: val
         });
     }
-
-    // async componentDidMount() {
-    //     const allCourses = await getallCourses();
-    //     const enrollments = await getAllEnrollments(); // get all enrollments
-    //     this.setState({ courses: allCourses, displayedCourses: allCourses });
-    // }
 
     async searchCourseByName(evt) {
         evt.preventDefault();
@@ -111,13 +96,14 @@ export class Courses extends React.Component {
         }
     }
 
+    showForm(crn) {
+        this.setState({ showForm: true, crnToEdit: crn });
+    }
 
-    async addEnrollment(course) {
-        // await addEnrollment();
-        var oldEnrollments = this.state.enrollments;
-        oldEnrollments.push(course);
-        this.setState({ enrollments: oldEnrollments });
-        console.log(this.state.enrollments);
+    async addEnrollment(crn) {
+        var netid = this.state.newCourse;
+        console.log(this.state.newCourse);
+        await addEnrollment(netid, crn);
     }
 
     renderTableData() {
@@ -130,8 +116,16 @@ export class Courses extends React.Component {
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="enroll" onClick={this.addEnrollment.bind(this, course)}> Enroll </Button> &nbsp;
+                    <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;
                     {CRN}
+
+                    {(this.state.showForm && (this.state.crnToEdit===CRN))
+                        ? ( <form onSubmit={this.addEnrollment.bind(this, CRN)}>
+                                <text> Net ID </text>
+                                <input type="text" onChange={this.updateInput}/>
+                                <input type="submit" value="Submit"/>
+                            </form>
+                        ) : (<></>)}
                 </td>
                 <td>{name} </td>
                 <td>{professor_name} </td>
@@ -147,9 +141,7 @@ export class Courses extends React.Component {
     render() {
         return (
             <div>
-                <NavBar
-                    enrollments={this.state.enrollments}
-                />
+                <NavBar/>
 
                 <h1 id='title'>Courses</h1>
 
