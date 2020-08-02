@@ -3,6 +3,7 @@ import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
 import './Table.css';
 import { addEnrollment, basicSearch } from '../utils/apiWrapper';
+import { Form } from './Form';
 
 export class Courses extends React.Component {
     constructor(props) {
@@ -129,17 +130,7 @@ export class Courses extends React.Component {
 
                 <h1 id='title'>Courses</h1>
 
-
-                <form onSubmit={this.searchCourseByName}>
-                    <input type="text" placeholder="Subject" onChange={this.updateInput}/>
-                    <input type="number" placeholder="Course No." name="rating" min="100" max="600" step="1" onChange={this.updateInput}/>
-                    <input type="text" placeholder="Course Name" onChange={this.updateInput}/>
-                    <input type="text" placeholder="Keyword" onChange={this.updateInput}/>
-                    <input type="text" placeholder="Professor Last Name" onChange={this.updateInput}/>
-                    <input type="number" placeholder="Rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateInput}/>
-                    <input type="number" placeholder="GPA" name="rating" min="0" max="4" step="0.01" onChange={this.updateInput}/>
-                    <input type="submit" value="Search"/>
-                </form>
+                <Form></Form>
 
                 <table id='table'>
                     <tbody>
