@@ -10,7 +10,7 @@ exports.findWithoutCrn = (req, res) => {
     }
 
     BasicSearch.findNoCrn(
-        req.params.subject, req.params.number, req.params.courseName, req.params.keyword, req.params.prof_lastname, req.params.rtg_lower, req.params.gpa_lower,
+        req.query.subject, req.query.number, req.query.courseName, req.query.keyword, req.query.prof_lastname, req.query.rtg_lower, req.query.gpa_lower,
         (err, data) => {
         if (err) {
             if (err.kind === "not_found") {

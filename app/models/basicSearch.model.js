@@ -15,6 +15,8 @@ BasicSearch.findNoCrn = (subject, number, courseName, keyword, prof_lastname, rt
   // Add search parameters if they are not undefined
   var search_query = "SELECT c.subject, c.number, c.name, c.description, s.CRN, s.avg_gpa, p.firstname, p.lastname, p.avg_rating FROM course c NATURAL JOIN section s, professor p WHERE s.professor_name LIKE CONCAT(p.lastname,'%')";
   
+console.log(subject + " " + number + " " + courseName + " " + keyword + " " + prof_lastname + " " + rtg_lower + " " + gpa_lower);
+
   if (subject != undefined) {
     search_query += ` AND c.subject='${subject}'`;
   }
