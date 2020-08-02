@@ -11,7 +11,7 @@ from scipy import sparse
 # Prerequisite Graph
 #--------------------
 
-def prerequisite(netid, standing, department, user_courses):
+def prerequisite(netid, standing, department, user_courses, mycursor):
     data = pd.read_csv('./app/data/prerequisites.csv')
     data_dept = data[data.Course.str.startswith(department + ' ')]
 
@@ -25,7 +25,7 @@ def prerequisite(netid, standing, department, user_courses):
                 user_courses.append(prereq)
 
     # Go through all department courses and check whether user can take them
-    recCourses = []
+    possibleCourses = []
     for index, row in data_dept.iterrows():
         cur_course = row['Course']
         if (cur_course in user_courses):
@@ -39,15 +39,30 @@ def prerequisite(netid, standing, department, user_courses):
                 add = False
                 break
         if add:
-            recCourses.append(cur_course)
+            possibleCourses.append(cur_course)
 
-    # 
+    # (Optional) Only selecting core classes from list of clases
+
+    # Rank classes based on number/gpa/teacher rating
+    start_i = len(department) + 1
+    where_q = ""
+    for i in range(len(possibleCourses)):
+        if i==0:
+            where_q += " tmp.number=" + possibleCourses[i][start_i:]
+            continue
+        where_q += " OR tmp.number=" + possibleCourses[i][start_i:]
+
+    search_q = "SELECT * FROM (SELECT * FROM course_rtgs WHERE subject='%s') tmp WHERE%s ORDER BY tmp.avg_gpa DESC, tmp.avg_rating DESC, tmp.number DESC" % (department, where_q)
+    mycursor.execute(search_q)
+    recCourses = mycursor.fetchall()
+    print(recCourses)
+
 
 #----------------------------------
 # Nearest Neighbors Recommendation
 #----------------------------------
 
-def nearestNeighbors(netid, standing, department, user_courses):
+def nearestNeighbors(netid, standing, department, user_courses, mycursor):
     data = pd.read_csv('./app/data/courses.csv')
 
     # Create a new dataframe without the user ids.
@@ -174,6 +189,10 @@ courses = mycursor.fetchall()
 courses = [elem[0] for elem in courses]
 
 if users[0][0] < 100:
-    prerequisite(netid, standing, department, courses)
+    prerequisite(netid, standing, department, courses, mycursor)
 else:
-    nearestNeighbors(netid, standing, department, courses)
+    nearestNeighbors(netid, standing, department, courses, mycursor)
+
+# Commit and close transaction
+mydb.commit()
+mydb.close()
