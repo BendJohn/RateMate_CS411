@@ -11,30 +11,30 @@ const BasicSearch = function(basicSearch) {
   this.gpa_lower = basicSearch.gpa_lower;
 };
 
-BasicSearch.findNoCrn = (basicSearch, result) => {
+BasicSearch.findNoCrn = (subject, number, courseName, keyword, prof_lastname, rtg_lower, gpa_lower, result) => {
   // Add search parameters if they are not undefined
   var search_query = "SELECT c.subject, c.number, c.name, c.description, s.CRN, s.avg_gpa, p.firstname, p.lastname, p.avg_rating FROM course c NATURAL JOIN section s, professor p WHERE s.professor_name LIKE CONCAT(p.lastname,'%')";
   
-  if (basicSearch.subject != undefined) {
-    search_query += ` AND c.subject='${basicSearch.subject}'`;
+  if (subject != undefined) {
+    search_query += ` AND c.subject='${subject}'`;
   }
-  if (basicSearch.number != undefined) {
-    search_query += ` AND c.number=${basicSearch.number}`;
+  if (number != undefined) {
+    search_query += ` AND c.number=${number}`;
   }
-  if (basicSearch.courseName != undefined) {
-    search_query += ` AND c.name LIKE '%${basicSearch.courseName}%'`;
+  if (courseName != undefined) {
+    search_query += ` AND c.name LIKE '%${courseName}%'`;
   }
-  if (basicSearch.keyword != undefined) {
-    search_query += ` AND c.description LIKE '%${basicSearch.keyword}%'`;
+  if (keyword != undefined) {
+    search_query += ` AND c.description LIKE '%${keyword}%'`;
   }
-  if (basicSearch.prof_lastname != undefined) {
-    search_query += ` AND p.lastname='${basicSearch.prof_lastname}'`;
+  if (prof_lastname != undefined) {
+    search_query += ` AND p.lastname='${prof_lastname}'`;
   }
-  if (basicSearch.rtg_lower != undefined) {
-    search_query += ` AND p.avg_rating>=${basicSearch.rtg_lower}`;
+  if (rtg_lower != undefined) {
+    search_query += ` AND p.avg_rating>=${rtg_lower}`;
   }
-  if (basicSearch.gpa_lower != undefined) {
-    search_query += ` AND s.avg_gpa>=${basicSearch.gpa_lower}`;
+  if (gpa_lower != undefined) {
+    search_query += ` AND s.avg_gpa>=${gpa_lower}`;
   }
   
   console.log(`Final search query: ${search_query}`);
