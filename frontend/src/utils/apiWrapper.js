@@ -45,20 +45,18 @@ export const addEnrollment = (netID, CRN) => {
 
 // iNumber, iCourseName, iKeyword, iProfLastName, iRtg_lower, iGpa_lower
 export const basicSearch = (iSubject, iNumber, iCourseName, iKeyword, iProfLastName, iRtg_lower, iGpa_lower) => {
-  console.log(iSubject);
   const requestString = `${BASE_URL}basicsearch`;
   return axios
     .get(requestString, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      subject: iSubject,
-      number: iNumber,
-      courseName: iCourseName,
-      keyword: iKeyword,
-      prof_lastname: iProfLastName,
-      rtg_lower: iRtg_lower,
-      gpa_lower: iGpa_lower
+      params: {
+        subject: iSubject,
+        number: iNumber,
+        courseName: iCourseName,
+        keyword: iKeyword,
+        prof_lastname: iProfLastName,
+        rtg_lower: iRtg_lower,
+        gpa_lower: iGpa_lower
+      }
     })
     .catch(error => {
       return {

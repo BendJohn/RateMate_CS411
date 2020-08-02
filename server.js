@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 require("./app/routes/professor.routes.js")(app);
 require("./app/routes/basicSearch.routes.js")(app);
 require("./app/routes/enrollment.routes.js")(app);
+require("./app/routes/recommendation.routes.js")(app);
 
 // set port, listen for requests
 app.listen(5000, () => {
