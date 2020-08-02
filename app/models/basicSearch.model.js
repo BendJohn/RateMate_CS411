@@ -27,7 +27,7 @@ BasicSearch.findByCrn = (crn, basicSearch, result) => {
 BasicSearch.findNoCrn = (basicSearch, result) => {
   // Add search parameters if they are not undefined
   var search_query = "SELECT c.subject, c.number, c.name, c.description, s.CRN, s.avg_gpa, p.firstname, p.lastname, p.avg_rating FROM course c NATURAL JOIN section s, professor p WHERE s.professor_name LIKE CONCAT(p.lastname,'%')";
-  
+
   if (basicSearch.subject != undefined) {
     search_query += ` AND c.subject='${basicSearch.subject}'`;
   }

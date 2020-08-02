@@ -2,63 +2,43 @@ import React from 'react';
 import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
 import './Table.css';
-import { addEnrollment } from '../utils/apiWrapper';
+import { addEnrollment, basicSearch } from '../utils/apiWrapper';
 
 export class Courses extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            courses: [
-                {
-                    professor_name: "John Smith", 
-                    CRN: 41758, 
-                    name: "Intro to CS",
-                    comments: "Comments!", 
-                    availability: true,
-                    avgGpa: 3.33,
-                    requirements_filled: "Science Gen Ed",
-                    prerequisites: "123"
-                },
-                {
-                    professor_name: "Pocahontas", 
-                    CRN: 333, 
-                    name: "Advanced Algebra",
-                    comments: "Comments!", 
-                    availability: false,
-                    avgGpa: 4.0,
-                    requirements_filled: "English Gen Ed",
-                    prerequisites: "222"
-                }
-            ],
-            displayedCourses: [
-                {
-                    professor_name: "John Smith", 
-                    CRN: 41758, 
-                    name: "Intro to CS",
-                    comments: "Comments!", 
-                    availability: true,
-                    avgGpa: 3.33,
-                    requirements_filled: "Science Gen Ed",
-                    prerequisites: "123"
-                },
-                {
-                    professor_name: "Pocahontas", 
-                    CRN: 333, 
-                    name: "Advanced Algebra",
-                    comments: "Comments!", 
-                    availability: false,
-                    avgGpa: 4.0,
-                    requirements_filled: "English Gen Ed",
-                    prerequisites: "222"
-                }
-            ],
+            courses: [],
+            displayedCourses: [],
             newCourse: "",
             showForm: false,
-            crnToEdit: 0
+            crnToEdit: 0,
+
+            search: {
+                subject: "",
+                number: 0,
+                courseName: "",
+                keyword: "",
+                prof_lastname: "",
+                rtg_lower: "",
+                gpa_lower: ""
+            }
         };
 
         this.updateInput = this.updateInput.bind(this);
         this.searchCourseByName = this.searchCourseByName.bind(this);
+    }
+
+    async componentDidMount() {
+        const res = await basicSearch();
+        console.log(res);
+        this.setState({
+            courses: res.data,
+            displayedCourses: res.data
+        })
+
+        const r = await basicSearch("hi", 411, "Database Systems", "the", "Alawini", 0, 0);
+        console.log(r);
     }
 
     updateInput(evt) {
@@ -73,9 +53,12 @@ export class Courses extends React.Component {
         });
     }
 
+    updateSearch(evt) {
+        
+    }
+
     async searchCourseByName(evt) {
         evt.preventDefault();
-        console.log(this.state);
         if (this.state.newCourse !== undefined) {
             if (this.state.newCourse === "") {
                 var courses = this.state.courses;
@@ -83,16 +66,18 @@ export class Courses extends React.Component {
                 return;
             }
 
-            // const res = await getProfessorByName(this.state.newProfessor);
-            var searchStr = this.state.newCourse;
-            var filtered = [];
+            //const res = await basicSearch(this.state.newCourse);
+            const res = await basicSearch("hi", 411, "Database Systems", "the", "Alawini", 0, 0);
+            console.log(res);
+            // var searchStr = this.state.newCourse;
+            // var filtered = [];
 
-            for (var i = 0; i < this.state.courses.length; i++) {
-                if (this.state.courses[i].name.toLowerCase().includes(searchStr.toLowerCase())) {
-                    filtered.push(this.state.courses[i]);
-                }
-            }
-            this.setState({ displayedCourses: filtered })
+            // for (var i = 0; i < this.state.courses.length; i++) {
+            //     if (this.state.courses[i].name.toLowerCase().includes(searchStr.toLowerCase())) {
+            //         filtered.push(this.state.courses[i]);
+            //     }
+            // }
+            // this.setState({ displayedCourses: filtered })
         }
     }
 
@@ -102,7 +87,6 @@ export class Courses extends React.Component {
 
     async addEnrollment(crn) {
         var netid = this.state.newCourse;
-        console.log(this.state.newCourse);
         await addEnrollment(netid, crn);
     }
 
@@ -112,12 +96,12 @@ export class Courses extends React.Component {
         }
 
         return this.state.displayedCourses.map((course, index) => {
-        const { professor_name, CRN, name, comments, availability, avgGpa, requirements_filled, prerequisites } = course //destructuring
+        const { subject, number, name, description, CRN, avg_gpa, firstname, lastname, avg_rating } = course //destructuring
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;
                     {CRN}
+                    <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;
 
                     {(this.state.showForm && (this.state.crnToEdit===CRN))
                         ? ( <form onSubmit={this.addEnrollment.bind(this, CRN)}>
@@ -127,13 +111,13 @@ export class Courses extends React.Component {
                             </form>
                         ) : (<></>)}
                 </td>
+                <td>{subject} </td>
+                <td>{number} </td>
                 <td>{name} </td>
-                <td>{professor_name} </td>
-                <td>{avgGpa} </td>
-                <td> {availability ? ("Open") : ("Closed")} </td>
-                <td>{requirements_filled} </td>
-                <td>{prerequisites} </td>
-                <td>{comments} </td>
+                <td> {description} </td>
+                <td>{avg_gpa} </td>
+                <td>{firstname}  {lastname} </td>
+                <td>{avg_rating} </td>
             </tr>
         )})
     }
@@ -145,15 +129,22 @@ export class Courses extends React.Component {
 
                 <h1 id='title'>Courses</h1>
 
+
                 <form onSubmit={this.searchCourseByName}>
-                    <input type="text" onChange={this.updateInput}/>
+                    <input type="text" placeholder="Subject" onChange={this.updateInput}/>
+                    <input type="number" placeholder="Course No." name="rating" min="100" max="600" step="1" onChange={this.updateInput}/>
+                    <input type="text" placeholder="Course Name" onChange={this.updateInput}/>
+                    <input type="text" placeholder="Keyword" onChange={this.updateInput}/>
+                    <input type="text" placeholder="Professor Last Name" onChange={this.updateInput}/>
+                    <input type="number" placeholder="Rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateInput}/>
+                    <input type="number" placeholder="GPA" name="rating" min="0" max="4" step="0.01" onChange={this.updateInput}/>
                     <input type="submit" value="Search"/>
                 </form>
 
                 <table id='table'>
                     <tbody>
-                        <tr> <th> CRN </th> <th> Name </th> <th> Professor </th> <th> Avg GPA </th> <th> Availability </th>
-                        <th> Requirements Filled </th> <th> Prerequisites </th> <th> Comments </th> </tr>
+                        <tr> <th> CRN </th> <th> Subject </th> <th> Number </th> <th> Name </th> <th> Description </th>
+                        <th> Average GPA </th> <th> Professor </th> <th> Avg Rating </th> </tr>
                         {this.renderTableData()}
                     </tbody>
                 </table>
