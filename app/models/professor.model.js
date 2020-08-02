@@ -2,7 +2,8 @@ const sql = require("./db.js");
 
 // constructor
 const Professor = function(professor) {
-  this.professor_name = professor.professor_name;
+  this.firstname = professor.firstname;
+  this.lastname = professor.lastname;
   this.avg_rating = professor.avg_rating;
 };
 
@@ -20,7 +21,7 @@ Professor.create = (newProfessor, result) => {
 };
 
 Professor.findById = (professorName, result) => {
-  sql.query(`SELECT * FROM professor WHERE professor_name LIKE '%${professorName}%'`, (err, res) => {
+  sql.query(`SELECT * FROM professor WHERE firstname LIKE '%${professorName}%' OR lastname LIKE '%${professorName}%'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -51,10 +52,10 @@ Professor.getAll = result => {
   });
 };
 
-Professor.updateById = (professor_name, professor, result) => {
+Professor.updateById = (professorName, professor, result) => {
   sql.query(
-    "UPDATE professor SET avg_rating = ? WHERE professor_name = ?",
-    [professor.avg_rating, professor_name],
+    "UPDATE professor SET avg_rating = ? WHERE firstname = ? AND lastname = ?",
+    [professor.avg_rating, professorName.split(" ")[0], professorName.split(" ")[1]],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -74,8 +75,11 @@ Professor.updateById = (professor_name, professor, result) => {
   );
 };
 
-Professor.remove = (professor_name, result) => {
-  sql.query(`DELETE FROM professor WHERE professor_name = '${professor_name}'`, (err, res) => {
+Professor.remove = (professorName, result) => {
+  var arr = professorName.split(" ");
+  var firstname = arr[0];
+  var lastname = arr[1];
+  sql.query(`DELETE FROM professor WHERE firstname = '${firstname}' AND lastname='${lastname}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -88,7 +92,7 @@ Professor.remove = (professor_name, result) => {
       return;
     }
 
-    console.log("deleted professor with name: ", professor_name);
+    console.log("deleted professor with name: ", professorName);
     result(null, res);
   });
 };

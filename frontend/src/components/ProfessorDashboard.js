@@ -9,8 +9,8 @@ export class ProfessorDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            professors: [{professor_name: "Example", avg_rating: 4.0}],
-            displayedProfessors: [{professor_name: "Example", avg_rating: 4.0}],
+            professors: [{firstname: "Example", lastname: "Example", avg_rating: 4.0}],
+            displayedProfessors: [{firstname: "Example", lastname: "Example", avg_rating: 4.0}],
             newProfessor: '',
             newRating: 0,
             showDeleteError: false,
@@ -129,7 +129,7 @@ export class ProfessorDashboard extends React.Component {
             
             var displayed = [];
             for (var i = 0; i < res.length; i++) {
-                displayed.push({professor_name: res[i].professor_name, avg_rating: res[i].avg_rating })
+                displayed.push({firstname: res[i].firstname, lastname: res[i].lastname, avg_rating: res[i].avg_rating })
             }
             this.setState({ displayedProfessors: displayed});
         }

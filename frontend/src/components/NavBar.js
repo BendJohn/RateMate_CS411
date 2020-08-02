@@ -14,8 +14,7 @@ export class NavBar extends React.Component {
   render() {
     return (
       <>
-        <Button onClick={() => history.push({pathname: '/'})}> Professor Dashboard </Button>
-        <Button onClick={() => history.push({pathname: '/Courses'})}> Courses </Button>
+        <Button onClick={() => history.push({pathname: '/'})}> Courses </Button>
         <Button onClick={() => history.push({pathname: '/Recommendations'})}> Recommendations </Button>
         <Button onClick={() => history.push(
             { pathname: '/Enrollments', 

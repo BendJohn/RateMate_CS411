@@ -5,6 +5,70 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
+export const getEnrollmentsByNetID = (netid) => {
+  return instance.get(`enrollments/${netid}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
+export const deleteEnrollment = (netid, crn) => {
+  return instance.delete(`enrollments/${netid}/${crn}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
+export const addEnrollment = (netID, CRN) => {
+  const requestString = `${BASE_URL}enrollments`;
+  return axios
+    .post(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      netid: netID,
+      crn: CRN
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO ADD ENROLLMENT",
+        error
+      };
+    });
+};
+
+// iNumber, iCourseName, iKeyword, iProfLastName, iRtg_lower, iGpa_lower
+export const basicSearch = (iSubject, iNumber, iCourseName, iKeyword, iProfLastName, iRtg_lower, iGpa_lower) => {
+  const requestString = `${BASE_URL}basicsearch`;
+  return axios
+    .get(requestString, {
+      params: {
+        subject: iSubject,
+        number: iNumber,
+        courseName: iCourseName,
+        keyword: iKeyword,
+        prof_lastname: iProfLastName,
+        rtg_lower: iRtg_lower,
+        gpa_lower: iGpa_lower
+      }
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO GET ALL COURSES",
+        error
+      };
+    });
+};
+
+
+// Professors (kind of broken)
+
 export const getAllProfessors = () => {
     return instance.get('professors').then(
       res => res.data,
@@ -32,7 +96,8 @@ export const createProfessor = (name, rating) => {
       headers: {
         "Content-Type": "application/json"
       },
-      professor_name: name,
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ")[1],
       avg_rating: rating
     })
     .catch(error => {
