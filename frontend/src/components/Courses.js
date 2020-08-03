@@ -176,6 +176,7 @@ export class Courses extends React.Component {
     }
 
     renderTableData() {
+        console.log(this.state);
         if (this.state.displayedCourses.length === 0) {
             return;
         }
