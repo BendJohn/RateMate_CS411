@@ -41,8 +41,6 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
         if add:
             possibleCourses.append(cur_course)
 
-    # (Optional) Only selecting core classes from list of clases
-
     # Rank classes based on number/gpa/teacher rating
     start_i = len(department) + 1
     where_q = ""
@@ -54,7 +52,18 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
 
     search_q = "SELECT * FROM (SELECT * FROM course_rtgs WHERE subject='%s') tmp WHERE%s ORDER BY tmp.avg_gpa DESC, tmp.avg_rating DESC, tmp.number DESC" % (department, where_q)
     mycursor.execute(search_q)
-    recCourses = mycursor.fetchall()
+    allCourses = mycursor.fetchall()
+
+    # (Optional) Only selecting core classes from list of clases
+    coreCourses = pd.read_csv('./app/data/grad_requirements_shorten.csv')
+    row = coreCourses.loc[coreCourses["Acronym"] == department]["Courses"]
+    res = row.get_values()[0].strip('][').split(', ') 
+    recCourses = allCourses
+    for i,tup in enumerate(allCourses):
+        course = tup[0] + " " + str(tup[1])
+        if course not in res:
+            recCourses.append(recCourses.pop(i))
+
     print(recCourses)
 
 
