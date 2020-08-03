@@ -5,6 +5,16 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
+export const getRecsByNetID = (netid) => {
+  return instance.get(`recommendations/${netid}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
 export const getEnrollmentsByNetID = (netid) => {
   return instance.get(`enrollments/${netid}`).then(
     res => res.data,
