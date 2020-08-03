@@ -101,7 +101,7 @@ export class Recommendations extends React.Component {
                 <td>{subject} </td>
                 <td>{number} </td>
                 <td>{name} </td>
-                <td> {description} </td>
+                <td> {description} </td> 
                 <td>{avg_gpa} </td>
                 <td>{firstname}  {lastname} </td>
                 <td>{avg_rating} </td>

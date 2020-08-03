@@ -43,7 +43,7 @@ export const addEnrollmentExistingUser = (netID, CRN) => {
         "Content-Type": "application/json"
       },
       netid: netID,
-      crn: CRN
+      crn: CRN 
     })
     .catch(error => {
       return {
