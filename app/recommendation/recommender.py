@@ -15,7 +15,7 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
     data = pd.read_csv('./app/data/prerequisites.csv')
     data_dept = data[data.Course.str.startswith(department + ' ')]
 
-    # Add all CS prerequisite courses
+    # Add all department prerequisite courses
     for uCourse in user_courses:
         uCourse_prereqs = data_dept.loc[data_dept['Course'] == uCourse]
         num_prereqs = uCourse_prereqs.iloc[0]['PrerequisiteNumber']
@@ -62,8 +62,36 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
 # Nearest Neighbors Recommendation
 #----------------------------------
 
-def nearestNeighbors(netid, standing, department, user_courses, mycursor):
-    data = pd.read_csv('./app/data/courses.csv')
+def nearestNeighbors(netid, standing, department, user_courses, mycursor, mydb):
+    #-------------
+    # SET-UP DATA
+    #-------------
+
+    # Create table of users with all courses zeroed
+    mycursor.execute("SELECT * FROM enrollments")
+    enrolls = mycursor.fetchall()
+    df_users = pd.read_sql("SELECT DISTINCT netid FROM enrollments", con=mydb)
+
+    mycursor.execute("SELECT crn FROM section")
+    cols = mycursor.fetchall()
+    cols = [elem[0] for elem in cols]
+
+    df_data = pd.DataFrame(columns=cols)
+    data = pd.concat([df_users, df_data], ignore_index=True, axis=1)
+    cols.insert(0, "user")
+    data.columns = cols
+    for col in data.columns:
+        if col=="user":
+            continue
+        data[col] = 0
+
+    # If user has taken a crn, set df[user][crn] = 1
+    for u, c in enrolls:
+        index = data[data.user == u].index.tolist()[0]
+        data.at[index, c] = 1
+    print(data)
+
+    # data = pd.read_csv('./app/data/courses.csv')
 
     # Create a new dataframe without the user ids.
     data_items = data.drop('user', 1)
@@ -129,7 +157,7 @@ def nearestNeighbors(netid, standing, department, user_courses, mycursor):
     for i in range(0, len(data_matrix.columns)):
         data_neighbors.iloc[i,:10] = data_matrix.iloc[0:,i].sort_values(ascending=False)[:10].index
 
-    user = 5985
+    user = netid
     user_index = data[data.user == user].index.tolist()[0]
 
     # Get the artists the user has played.
@@ -191,7 +219,7 @@ courses = [elem[0] for elem in courses]
 if users[0][0] < 100:
     prerequisite(netid, standing, department, courses, mycursor)
 else:
-    nearestNeighbors(netid, standing, department, courses, mycursor)
+    nearestNeighbors(netid, standing, department, courses, mycursor, mydb)
 
 # Commit and close transaction
 mydb.commit()
