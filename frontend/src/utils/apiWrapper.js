@@ -5,6 +5,16 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
+export const getRecsByNetID = (netid) => {
+  return instance.get(`recommendations/${netid}`).then(
+    res => res.data,
+    err => {
+      console.error(err);
+      return null;
+    },
+  );
+};
+
 export const getEnrollmentsByNetID = (netid) => {
   return instance.get(`enrollments/${netid}`).then(
     res => res.data,
@@ -25,7 +35,7 @@ export const deleteEnrollment = (netid, crn) => {
   );
 };
 
-export const addEnrollment = (netID, CRN) => {
+export const addEnrollmentExistingUser = (netID, CRN) => {
   const requestString = `${BASE_URL}enrollments`;
   return axios
     .post(requestString, {
@@ -33,6 +43,27 @@ export const addEnrollment = (netID, CRN) => {
         "Content-Type": "application/json"
       },
       netid: netID,
+      crn: CRN
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO ADD ENROLLMENT",
+        error
+      };
+    });
+};
+
+export const addEnrollmentNewUser = (netID, iName, iStanding, iDept, CRN) => {
+  const requestString = `${BASE_URL}enrollments`;
+  return axios
+    .post(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      netid: netID,
+      name: iName,
+      standing: iStanding,
+      department: iDept,
       crn: CRN
     })
     .catch(error => {

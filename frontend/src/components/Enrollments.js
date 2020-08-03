@@ -15,7 +15,6 @@ export class Enrollments extends React.Component {
     }
 
     updateInput(evt) {
-        console.log(evt);
         const val = evt.target.value;
         var enr = this.state.enrollments;
 

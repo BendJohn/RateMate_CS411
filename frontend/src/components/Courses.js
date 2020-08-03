@@ -2,8 +2,7 @@ import React from 'react';
 import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
 import './Table.css';
-import { addEnrollment, basicSearch } from '../utils/apiWrapper';
-import { Form } from './Form';
+import { addEnrollmentExistingUser, addEnrollmentNewUser, basicSearch } from '../utils/apiWrapper';
 
 export class Courses extends React.Component {
     constructor(props) {
@@ -11,9 +10,13 @@ export class Courses extends React.Component {
         this.state = {
             courses: [],
             displayedCourses: [],
-            newCourse: "",
-            showForm: false,
+            newNetId: "",
+            newName: "",
+            newStanding: "",
+            newDept: "",
             crnToEdit: 0,
+            showForm: false,
+            
 
             newSubject: "",
             newNumber: 0,
@@ -25,6 +28,10 @@ export class Courses extends React.Component {
         };
 
         this.updateInput = this.updateInput.bind(this);
+        this.updateStanding = this.updateStanding.bind(this);
+        this.updateDepartment = this.updateDepartment.bind(this);
+        this.updateName = this.updateName.bind(this);
+        this.addEnrollment = this.addEnrollment.bind(this);
 
         this.updateSubject = this.updateSubject.bind(this);
         this.updateNumber = this.updateNumber.bind(this);
@@ -124,8 +131,6 @@ export class Courses extends React.Component {
         evt.preventDefault();
         const {newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA} = this.state; 
 
-        console.log(this.state);
-
         if ( (newSubject === "" || newSubject === undefined)
             && (newNumber === "" || newNumber === undefined)
             && (newCourseName === "" || newCourseName === undefined)
@@ -134,9 +139,6 @@ export class Courses extends React.Component {
             && (newRating === "" || newRating === undefined)
             && (newGPA === "" || newGPA === undefined)) {
             var allCourses = this.state.courses;
-            
-            console.log(this.state);
-
             this.setState({ displayedCourses: allCourses });
             return;
         }
@@ -156,13 +158,82 @@ export class Courses extends React.Component {
 
     updateInput(evt) {
         const val = evt.target.value;
+        const netid = this.state.newNetId;
+        const name = this.state.newName;
+        const standing = this.state.newStanding;
+        const dept = this.state.newDept;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
+        const crn = this.state.crnToEdit;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newCourse: val
+            newNetId: val,
+            newName: name,
+            newStanding: standing,
+            newDept: dept,
+            crnToEdit: crn
+        });
+    }
+
+    updateName(evt) {
+        const val = evt.target.value;
+        const netid = this.state.newNetId;
+        const standing = this.state.newStanding;
+        const dept = this.state.newDept;
+        const courses = this.state.courses;
+        const displayed = this.state.displayedCourses;
+        const crn = this.state.crnToEdit;
+
+        this.state = ({
+            courses: courses,
+            displayedCourses: displayed,
+            newNetId: netid,
+            newName: val,
+            newStanding: standing,
+            newDept: dept,
+            crnToEdit: crn
+        });
+    }
+
+    updateStanding(evt) {
+        const val = evt.target.value;
+        const netid = this.state.newNetId;
+        const name = this.state.newName;
+        const dept = this.state.newDept;
+        const courses = this.state.courses;
+        const displayed = this.state.displayedCourses;
+        const crn = this.state.crnToEdit;
+
+        this.state = ({
+            courses: courses,
+            displayedCourses: displayed,
+            newNetId: netid,
+            newName: name,
+            newStanding: val,
+            newDept: dept,
+            crnToEdit: crn
+        });
+    }
+
+    updateDepartment(evt) {
+        const val = evt.target.value;
+        const netid = this.state.newNetId;
+        const name = this.state.newName;
+        const standing = this.state.newStanding;
+        const courses = this.state.courses;
+        const displayed = this.state.displayedCourses;
+        const crn = this.state.crnToEdit;
+
+        this.state = ({
+            courses: courses,
+            displayedCourses: displayed,
+            newNetId: netid,
+            newName: name,
+            newStanding: standing,
+            newDept: val,
+            crnToEdit: crn
         });
     }
 
@@ -170,9 +241,23 @@ export class Courses extends React.Component {
         this.setState({ showForm: true, crnToEdit: crn });
     }
 
-    async addEnrollment(crn) {
-        var netid = this.state.newCourse;
-        await addEnrollment(netid, crn);
+    async addEnrollment(evt) {
+        evt.preventDefault();
+        var netid = this.state.newNetId;
+        var name = this.state.newName;
+        var standing = this.state.newStanding;
+        var dept = this.state.newDept;
+        var crn = this.state.crnToEdit;
+
+        if ((name===undefined || name==="") &&
+            (standing===undefined || standing==="") &&
+            (dept===undefined || dept==="")) {
+            await addEnrollmentExistingUser(netid, crn);
+        } else {
+            // New user
+            await addEnrollmentNewUser(netid, name, standing, dept, crn);
+        }
+        
     }
 
     renderTableData() {
@@ -185,14 +270,18 @@ export class Courses extends React.Component {
         return (
             <tr key={CRN}>
                 <td> 
-                    {CRN}
+                    {CRN} &ensp;
                     <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;
 
                     {(this.state.showForm && (this.state.crnToEdit===CRN))
-                        ? ( <form onSubmit={this.addEnrollment.bind(this, CRN)}>
-                                <text> Net ID </text>
-                                <input type="text" onChange={this.updateInput}/>
-                                <input type="submit" value="Submit"/>
+                        ? ( <form onSubmit={this.addEnrollment}>
+                                <input type="text" placeholder="Net ID" onChange={this.updateInput}/>
+                                <input type="text" placeholder="Name" onChange={this.updateName}/>
+                                <input type="text" placeholder="Standing" onChange={this.updateStanding}/>
+                                <input type="text" placeholder="Department" onChange={this.updateDepartment}/>
+                                <div> <input type="submit" value="Submit"/> </div>
+                                <div> <text> (Only fill out "Net ID" if existing user) </text> </div>
+                                
                             </form>
                         ) : (<></>)}
                 </td>
