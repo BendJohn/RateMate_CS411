@@ -2,6 +2,7 @@ import React from 'react';
 import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
 import abdu_gif from '../utils/abdu.gif';
+import { addEnrollmentExistingUser, getRecsByNetID } from '../utils/apiWrapper';
 
 export class Recommendations extends React.Component {
     constructor(props) {
@@ -10,53 +11,32 @@ export class Recommendations extends React.Component {
             // List of courses
             recs: [
                 {
-                    professor_name: "Ben John", 
-                    CRN: 312, 
-                    name: "Disapproving Nicknames 101",
-                    comments: "Comments!", 
-                    availability: true,
-                    avgGpa: 3.23,
-                    requirements_filled: "",
-                    prerequisites: "456"
-                },
-                {
-                    professor_name: "Pocahontas", 
-                    CRN: 333, 
-                    name: "Advanced Algebra",
-                    comments: "Comments!", 
-                    availability: false,
-                    avgGpa: 4.0,
-                    requirements_filled: "English Gen Ed",
-                    prerequisites: "222"
+                    subject: "CS",
+                    number: 411, 
+                    name: "Database Systems", 
+                    description: "Databases yo",
+                    CRN: 30109,
+                    avg_gpa: 3.77,
+                    firstname: "Abdu",
+                    lastname: "Alawini",
+                    avg_rating: 5.0
                 }
             ],
-            enrollments: [
-                {
-                    professor_name: "John Smith", 
-                    CRN: 123, 
-                    name: "Intro to CS",
-                    comments: "Comments!", 
-                    availability: true,
-                    avgGpa: 3.33,
-                    requirements_filled: "Science Gen Ed",
-                    prerequisites: "123"
-                },
-            ],
-
-            showGif: false
+            showGif: false,
+            showForm: false,
+            netID: "",
+            crnToEdit: 0
         };
+
+        this.updateInput = this.updateInput.bind(this);
+        this.addEnrollment = this.addEnrollment.bind(this);
     }
 
-    // async componentDidMount() {
-    //     // get all enrollments
-    // }
-
-    async addEnrollment(course) {
-        // await addEnrollment();
-        var oldEnrollments = this.state.enrollments;
-        oldEnrollments.push(course);
-        this.setState({ enrollments: oldEnrollments });
-        console.log(this.state.enrollments);
+    async addEnrollment(evt) {
+        evt.preventDefault();
+        var netid = this.state.newNetId;
+        var crn = this.state.crnToEdit;
+        await addEnrollmentExistingUser(netid, crn);
     }
 
     showGIF() {
@@ -68,26 +48,63 @@ export class Recommendations extends React.Component {
         }
     }
 
+    showForm(crn) {
+        this.setState({ showForm: true, crnToEdit: crn });
+    }
+
+    updateInput(evt) {
+        const val = evt.target.value;
+        const crn = this.state.crnToEdit;
+        const r = this.state.recs;
+
+        this.state = ({
+            netID: val,
+            crnToEdit: crn,
+            recs: r
+        });
+    }
+
+    async getRecByNetId(evt) {
+        evt.preventDefault();
+        const netid = this.state.netID;
+        if (netid !== undefined) {
+            if (netid === "") {
+                this.setState({ recs: [] });
+                return;
+            }
+            const res = await getRecsByNetID(netid);
+            console.log(res);
+            //this.setState({ recs: res.data });
+        }
+    }
+
     renderTableData() {
         if (this.state.recs.length === 0) {
             return;
         }
 
         return this.state.recs.map((course, index) => {
-        const { professor_name, CRN, name, comments, availability, avgGpa, requirements_filled, prerequisites } = course //destructuring
+        const { subject, number, name, description, CRN, avg_gpa, firstname, lastname, avg_rating } = course //destructuring
         return (
             <tr key={CRN}>
                 <td> 
-                    <Button id="enroll" onClick={this.addEnrollment.bind(this, course)}> Enroll </Button> &nbsp;
-                    {CRN}
+                    {CRN} &ensp;
+                    <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;
+
+                    {(this.state.showForm && (this.state.crnToEdit===CRN))
+                        ? ( <form onSubmit={this.addEnrollment}>
+                                <input type="text" placeholder="Net ID" onChange={this.updateInput}/>
+                                <div> <input type="submit" value="Submit"/> </div>
+                            </form>
+                        ) : (<></>)}
                 </td>
+                <td>{subject} </td>
+                <td>{number} </td>
                 <td>{name} </td>
-                <td>{professor_name} </td>
-                <td>{avgGpa} </td>
-                <td> {availability ? ("Open") : ("Closed")} </td>
-                <td>{requirements_filled} </td>
-                <td>{prerequisites} </td>
-                <td>{comments} </td>
+                <td> {description} </td>
+                <td>{avg_gpa} </td>
+                <td>{firstname}  {lastname} </td>
+                <td>{avg_rating} </td>
             </tr>
         )})
     }
@@ -96,19 +113,22 @@ export class Recommendations extends React.Component {
     render() {
         return (
             <>
-                <NavBar
-                    enrollments={this.state.enrollments}
-                />
+                <NavBar/>
 
                 <h1 id='title'> Recommendations </h1>
 
-                <Button onClick={this.showGIF.bind(this)}> Are you excited for learning? </Button> &ensp;&ensp;&ensp;&ensp;
-                {this.state.showGif ?  (<img src={abdu_gif}/>) : (<> </>)}
+                <h1 id='title'> <Button style={{backgroundColor: '#c4fffc'}} onClick={this.showGIF.bind(this)}> Are you excited for learning? </Button> </h1> &ensp;&ensp;&ensp;&ensp;
+                <h1 id='title'> {this.state.showGif ?  (<img src={abdu_gif}/>) : (<> </>)} </h1>
+
+                <form onSubmit={this.getRecByNetId.bind(this)}>
+                    <input type="text" onChange={this.updateInput}/>
+                    <input type="submit" value="Search"/>
+                </form>
 
                 <table id='table'>
                     <tbody>
-                        <tr> <th> CRN </th> <th> Name </th> <th> Professor </th> <th> Avg GPA </th> <th> Availability </th>
-                        <th> Requirements Filled </th> <th> Prerequisites </th> <th> Comments </th> </tr>
+                        <tr> <th> CRN </th> <th> Subject </th> <th> Number </th> <th> Name </th> <th> Description </th>
+                            <th> Average GPA </th> <th> Professor </th> <th> Avg Rating </th> </tr>
                         {this.renderTableData()}
                     </tbody>
                 </table>
