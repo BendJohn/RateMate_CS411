@@ -47,16 +47,11 @@ export class Recommendations extends React.Component {
         };
     }
 
-    // async componentDidMount() {
-    //     // get all enrollments
-    // }
-
     async addEnrollment(course) {
         // await addEnrollment();
         var oldEnrollments = this.state.enrollments;
         oldEnrollments.push(course);
         this.setState({ enrollments: oldEnrollments });
-        console.log(this.state.enrollments);
     }
 
     showGIF() {
@@ -102,8 +97,8 @@ export class Recommendations extends React.Component {
 
                 <h1 id='title'> Recommendations </h1>
 
-                <Button onClick={this.showGIF.bind(this)}> Are you excited for learning? </Button> &ensp;&ensp;&ensp;&ensp;
-                {this.state.showGif ?  (<img src={abdu_gif}/>) : (<> </>)}
+                <h1 id='title'> <Button style={{backgroundColor: '#F2F2F2'}} onClick={this.showGIF.bind(this)}> Are you excited for learning? </Button> </h1> &ensp;&ensp;&ensp;&ensp;
+                <h1 id='title'> {this.state.showGif ?  (<img src={abdu_gif}/>) : (<> </>)} </h1>
 
                 <table id='table'>
                     <tbody>

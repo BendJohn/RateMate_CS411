@@ -25,7 +25,7 @@ export const deleteEnrollment = (netid, crn) => {
   );
 };
 
-export const addEnrollment = (netID, CRN) => {
+export const addEnrollmentExistingUser = (netID, CRN) => {
   const requestString = `${BASE_URL}enrollments`;
   return axios
     .post(requestString, {
@@ -33,6 +33,27 @@ export const addEnrollment = (netID, CRN) => {
         "Content-Type": "application/json"
       },
       netid: netID,
+      crn: CRN
+    })
+    .catch(error => {
+      return {
+        type: "FAILED TO ADD ENROLLMENT",
+        error
+      };
+    });
+};
+
+export const addEnrollmentNewUser = (netID, iName, iStanding, iDept, CRN) => {
+  const requestString = `${BASE_URL}enrollments`;
+  return axios
+    .post(requestString, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      netid: netID,
+      name: iName,
+      standing: iStanding,
+      department: iDept,
       crn: CRN
     })
     .catch(error => {
