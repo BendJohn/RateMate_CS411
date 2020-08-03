@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavBar } from './NavBar';
 import { Button } from 'reactstrap';
+import abdu_gif from '../utils/abdu.gif';
 
 export class Recommendations extends React.Component {
     constructor(props) {
@@ -40,7 +41,9 @@ export class Recommendations extends React.Component {
                     requirements_filled: "Science Gen Ed",
                     prerequisites: "123"
                 },
-            ]
+            ],
+
+            showGif: false
         };
     }
 
@@ -54,6 +57,15 @@ export class Recommendations extends React.Component {
         oldEnrollments.push(course);
         this.setState({ enrollments: oldEnrollments });
         console.log(this.state.enrollments);
+    }
+
+    showGIF() {
+        var curr = this.state.showGif;
+        if (curr) {
+            this.setState({ showGif: false });
+        } else {
+            this.setState({ showGif: true });
+        }
     }
 
     renderTableData() {
@@ -89,6 +101,9 @@ export class Recommendations extends React.Component {
                 />
 
                 <h1 id='title'> Recommendations </h1>
+
+                <Button onClick={this.showGIF.bind(this)}> Are you excited for learning? </Button> &ensp;&ensp;&ensp;&ensp;
+                {this.state.showGif ?  (<img src={abdu_gif}/>) : (<> </>)}
 
                 <table id='table'>
                     <tbody>
