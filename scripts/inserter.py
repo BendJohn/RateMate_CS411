@@ -15,15 +15,15 @@ professorData = pd.read_csv('./professor.csv')
 courseData = pd.read_csv('./uiuc-course-catalog.csv')
 print("hello world")
 
-for index, row in sectionData.iterrows():
-    if row["Subject"] != "CS":
-        continue
+# for index, row in sectionData.iterrows():
+#     if row["Subject"] != "CS":
+#         continue
 
-    if row["Sched Type"] == "ONL" or row["Sched Type"] == "DIS":
-        continue
-    search_q = "INSERT INTO section VALUES('" + str(row['Subject']) + "'," + str(row['Course']) + "," + str(row['CRN']) + ",'" + str(row['Course Title']) + "','" + str(row['Sched Type']) + "'," + str(row['A+']) + "," + str(row['A']) + "," + str(row['A-']) + "," + str(row['B+']) + "," + str(row['B']) + "," + str(row['B-']) + "," + str(row['C+']) + "," + str(row['C']) + "," + str(row['C-']) + "," + str(row['D+']) + "," + str(row['D']) + "," + str(row['D-']) + "," + str(row['F']) + "," + str(row['W']) + "," + str(row['Average Grade']) + ",'" + str(row['Primary Instructor']) + "')"
-    print(search_q)
-    mycursor.execute(search_q)
+#     if row["Sched Type"] == "ONL" or row["Sched Type"] == "DIS":
+#         continue
+#     search_q = "INSERT INTO section VALUES('" + str(row['Subject']) + "'," + str(row['Course']) + "," + str(row['CRN']) + ",'" + str(row['Course Title']) + "','" + str(row['Sched Type']) + "'," + str(row['A+']) + "," + str(row['A']) + "," + str(row['A-']) + "," + str(row['B+']) + "," + str(row['B']) + "," + str(row['B-']) + "," + str(row['C+']) + "," + str(row['C']) + "," + str(row['C-']) + "," + str(row['D+']) + "," + str(row['D']) + "," + str(row['D-']) + "," + str(row['F']) + "," + str(row['W']) + "," + str(row['Average Grade']) + ",'" + str(row['Primary Instructor']) + "')"
+#     print(search_q)
+#     mycursor.execute(search_q)
 
 # for index, row in professorData.iterrows():
 #     avg_rating = round(row['avg_rating'] * 10) / 10
@@ -32,7 +32,7 @@ for index, row in sectionData.iterrows():
 #     mycursor.execute(search_q)
 
 for index, row in courseData.iterrows():
-    if row["Subject"] != "CS" or row["Number"] > 300:
+    if row["Subject"] != "CS" or row["Number"] < 300:
         continue
 
     if row["Schedule_Information"] is np.nan:
