@@ -17,27 +17,29 @@ BasicSearch.findNoCrn = (subject, number, courseName, keyword, prof_lastname, rt
   
   console.log(subject + " " + number + " " + courseName + " " + keyword + " " + prof_lastname + " " + rtg_lower + " " + gpa_lower);
 
-  if (subject != undefined) {
+  if (subject != undefined && subject != "") {
     search_query += ` AND c.subject='${subject}'`;
   }
-  if (number != undefined) {
+  if (number != undefined && number != "") {
     search_query += ` AND c.number=${number}`;
   }
-  if (courseName != undefined) {
+  if (courseName != undefined && courseName != "") {
     search_query += ` AND c.name LIKE '%${courseName}%'`;
   }
-  if (keyword != undefined) {
+  if (keyword != undefined && keyword != "") {
     search_query += ` AND c.description LIKE '%${keyword}%'`;
   }
-  if (prof_lastname != undefined) {
+  if (prof_lastname != undefined && prof_lastname != "") {
     search_query += ` AND p.lastname='${prof_lastname}'`;
   }
-  if (rtg_lower != undefined) {
+  if (rtg_lower != undefined && rtg_lower != "") {
     search_query += ` AND p.avg_rating>=${rtg_lower}`;
   }
-  if (gpa_lower != undefined) {
+  if (gpa_lower != undefined && gpa_lower != "") {
     search_query += ` AND s.avg_gpa>=${gpa_lower}`;
   }
+
+  search_query += " GROUP BY p.firstname, p.lastname";
   
   console.log(`Final search query: ${search_query}`);
 
@@ -49,6 +51,7 @@ BasicSearch.findNoCrn = (subject, number, courseName, keyword, prof_lastname, rt
       }
   
     console.log("courses: ", res);
+    console.log(typeof(res));
     result(null, res);
   });
 };

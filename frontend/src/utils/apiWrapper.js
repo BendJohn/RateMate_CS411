@@ -6,7 +6,7 @@ const instance = axios.create({
 });
 
 export const getRecsByNetID = (netid) => {
-  return instance.get(`recommendations/${netid}`).then(
+  return instance.get(`recommendation/${netid}`).then(
     res => res.data,
     err => {
       console.error(err);

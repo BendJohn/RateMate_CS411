@@ -45,84 +45,174 @@ export class Courses extends React.Component {
 
     updateSubject(evt) {
         const val = evt.target.value;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newSubject: val
+            newSubject: val,
+            newNumber: num,
+            newCourseName: course,
+            newKeyword: keyword,
+            newProfessor: prof,
+            newRating: rating,
+            newGPA: gpa
         });
     }
 
     updateNumber(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newNumber: val
+            newSubject: subject,
+            newNumber: val,
+            newCourseName: course,
+            newKeyword: keyword,
+            newProfessor: prof,
+            newRating: rating,
+            newGPA: gpa
         });
     }
 
     updateCourseName(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newCourseName: val
+            newSubject: subject,
+            newNumber: num,
+            newCourseName: val,
+            newKeyword: keyword,
+            newProfessor: prof,
+            newRating: rating,
+            newGPA: gpa
         });
     }
 
     updateKeyword(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newKeyword: val
+            newSubject: subject,
+            newNumber: num,
+            newCourseName: course,
+            newKeyword: val,
+            newProfessor: prof,
+            newRating: rating,
+            newGPA: gpa
         });
     }
 
     updateProfessor(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newProfessor: val
+            newSubject: subject,
+            newNumber: num,
+            newCourseName: course,
+            newKeyword: keyword,
+            newProfessor: val,
+            newRating: rating,
+            newGPA: gpa
         });
     }
 
     updateRating(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
-            newRating: val
+            newSubject: subject,
+            newNumber: num,
+            newCourseName: course,
+            newKeyword: keyword,
+            newProfessor: prof,
+            newRating: val,
+            newGPA: gpa
         });
     }
 
     updateGPA(evt) {
         const val = evt.target.value;
+        const subject = this.state.newSubject;
+        const num = this.state.newNumber;
+        const course = this.state.newCourseName;
+        const keyword = this.state.newKeyword;
+        const prof = this.state.newProfessor;
+        const rating = this.state.newRating;
+        const gpa = this.state.newGPA;
         const courses = this.state.courses;
         const displayed = this.state.displayedCourses;
 
         this.state = ({
             courses: courses,
             displayedCourses: displayed,
+            newSubject: subject,
+            newNumber: num,
+            newCourseName: course,
+            newKeyword: keyword,
+            newProfessor: prof,
+            newRating: rating,
             newGPA: val
         });
     }
@@ -142,8 +232,11 @@ export class Courses extends React.Component {
             this.setState({ displayedCourses: allCourses });
             return;
         }
-
         const res = await basicSearch(newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA);
+        console.log(newRating);
+        console.log(newGPA);
+        console.log(newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA);
+        console.log(res);
         var newClasses = res.data;
         this.setState({ displayedCourses: newClasses });
     }
@@ -265,10 +358,12 @@ export class Courses extends React.Component {
             return;
         }
 
+        console.log(this.state.displayedCourses);
         return this.state.displayedCourses.map((course, index) => {
         const { subject, number, name, description, CRN, avg_gpa, firstname, lastname, avg_rating } = course //destructuring
+        const k = CRN + firstname + lastname;
         return (
-            <tr key={CRN}>
+            <tr key={k}>
                 <td> 
                     {CRN} &ensp;
                     <Button id="enroll" onClick={this.showForm.bind(this, CRN)}> Enroll </Button> &nbsp;

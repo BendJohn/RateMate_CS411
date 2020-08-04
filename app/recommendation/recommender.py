@@ -1,9 +1,7 @@
 import sys
 import mysql.connector
-
 import pandas as pd
 import numpy as np
-
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 
@@ -57,13 +55,14 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
     # (Optional) Only selecting core classes from list of clases
     coreCourses = pd.read_csv('./app/data/grad_requirements_shorten.csv')
     row = coreCourses.loc[coreCourses["Acronym"] == department]["Courses"]
-    res = row.get_values()[0].strip('][').split(', ') 
+    res = row.at[26].strip('][').split(', ')
     recCourses = allCourses
     for i,tup in enumerate(allCourses):
         course = tup[0] + " " + str(tup[1])
         if course not in res:
             recCourses.append(recCourses.pop(i))
 
+    recCourses = [list(elem) for elem in recCourses]
     print(recCourses)
 
 

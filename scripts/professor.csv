@@ -1,4 +1,5 @@
 firstname,lastname,avg_rating
+Abdu,Alawini,5.0
 Robert,Darmody,4.4286
 Pamela,Glosson,5
 Sydney,Slobodnik,3.25
@@ -30,7 +31,6 @@ Blake,Johnson,3
 Michael,Ward,4
 Mark,Shannon,5
 Masab,Garada,5
-Joseph,Miles,4.6667
 Steve,Kostell,4.3333
 Song,Cho,5
 Douglas,Jones,4
@@ -183,7 +183,7 @@ Margaret,Flinn,4
 Carol,Ash,1
 Yoram,Bresler,4.5
 Jennifer,Pollack,5
-Matthew,O'Brien,3
+Matthew,OBrien,3
 Susan,Curtis,2.7059
 Kimberly,Koch,5
 Chia-Fon,Lee,2
@@ -206,7 +206,7 @@ Brian,Rosten,3
 Paul,Reed,5
 Paramita,Mondal,2
 Floyd,McKeith,5
-Thomas,O'Gorman,4
+Thomas,OGorman,4
 Russell,Giannetta,1
 James,Miller,2.3333
 Kimani,Toussaint,5
@@ -288,7 +288,7 @@ German,Bollero,4.75
 Troy,Cooper,4.5
 Hannah,Chan,3
 B.,Spencer,4.1667
-Kevin,O'Leary,5
+Kevin,OLeary,5
 Fay,Hodza,5
 Jennifer,Scott,5
 Weimo,Zhu,5
@@ -521,7 +521,7 @@ Adele,Pacquette,4.3333
 Justin,Davidson,4.5
 Jennifer,Cravens,4
 Saurabh,Sinha,1
-David,O'Brien,4
+David,OBrien,4
 Caitlin,Clarke,4.8
 Maggie,Kainulainen,3.6667
 Mats,Selen,4.4634
@@ -529,7 +529,7 @@ Steven,Anderson,3
 Ankit,Saharan,5
 Ashwini,Chhatre,3
 Brent,Hart,3.25
-Jamie,O'Connor,5
+Jamie,OConnor,5
 Stacey,Korson,1
 Ken,Salo,1
 Oleksandra,Wallo,2
@@ -589,7 +589,6 @@ James,Stubbins,4.25
 Peter,Silhan,2.0769
 Michel,Bellini,4.4
 Alex,Kirlik,1
-Andrew,Bauer,4
 Cristina,Zapata,3.6667
 Ryan,Jones,3
 William,Morgan,4
@@ -667,7 +666,7 @@ Kristina,Rennekamp,5
 Kevin,Ford,3.6667
 Hugh,Robertson,4.6667
 Zhuowei,Huang,5
-Phillip,O'Connor,5
+Phillip,OConnor,5
 David,Sinow,3.3333
 Benjamin,Bascom,4
 Georgepierre,Lebron,3.2
@@ -697,7 +696,6 @@ Armstrong,,4.6667
 Alison,Colgrove,1
 Alan,Hansen,3.5
 Wei,Li,3.5
-Elizabeth,Good,1.6667
 Andrei,Kuzminov,1
 Mandy,Troger,5
 Matthew,Kamps,5
@@ -709,7 +707,7 @@ Thomas,Bassett,3.4286
 Yannick,Lionel,3
 James,Beauchamp,1
 Jane,Marshall,3.5
-John,D'Angelo,2.5
+John,DAngelo,2.5
 William,Noble,3
 Lanqing,Hua,1
 Jeff,Erickson,3.5
@@ -773,7 +771,6 @@ Wanju,Huang,5
 Richard,Esbenshade,2
 Curtis,Shoaf,4.6667
 Sara,Shrader,2
-Serife,Genis,2.1667
 Verity,Winship,3.25
 David,Michael,5
 J.,Beckett,4.5
@@ -879,7 +876,7 @@ Daniel,Bodony,3.5
 Allison,Earl,4.75
 J.,Giertz,3
 John,Braden,3.6667
-Dennis,O'Dea,3
+Dennis,ODea,3
 Scott,Ahlgren,3.625
 Sylvia,Ogilvie,3
 Alan,Mette,4
@@ -1222,7 +1219,6 @@ Koloutsou-Vakakis,,4
 Ann,Reisner,3
 Timothy,Laar,4
 Dan,Shao,3
-George,Bell,4.3333
 Robert,Tierney,4
 Alexandra,Cavallaro,2.5
 Lisa,Cacho,4.5
@@ -1449,7 +1445,7 @@ Sara,McLafferty,4.5
 James,Best,5
 Lu,Xu,3.25
 Jennifer,Bernhard,5
-Meghan,O'Meara,1.5
+Meghan,OMeara,1.5
 Isaac,Tubb,3.8571
 Tracey,Hickox,4
 Dana,Shalash,5
@@ -1488,7 +1484,6 @@ Jennifer,Shoaff,1.9
 Pamela,Shuler,5
 Emanuel,Rota,4
 David,Meyer,4
-Susan,Ahmed,4
 Darrel,Kesler,5
 Mohamed,Aboukhatwa,4
 David,Lange,4
@@ -1623,7 +1618,7 @@ Mohammad,Khalil,5
 Brian,Quick,4.5
 Praveen,Kumar,3.6
 Janet,Reis,4
-Valerie,O'Brien,5
+Valerie,OBrien,5
 Richard,Akresh,2
 Geralyn,Holley,5
 Jaewon,Choi,5
