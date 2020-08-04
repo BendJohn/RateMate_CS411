@@ -56,14 +56,22 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
     coreCourses = pd.read_csv('./app/data/grad_requirements_shorten.csv')
     row = coreCourses.loc[coreCourses["Acronym"] == department]["Courses"]
     res = row.at[26].strip('][').split(', ')
-    recCourses = allCourses
-    for i,tup in enumerate(allCourses):
+    recCoursesF = []
+    recCoursesB = []
+    for tup in allCourses:
         course = tup[0] + " " + str(tup[1])
         if course not in res:
-            recCourses.append(recCourses.pop(i))
+            recCoursesB.append(tup)
+        else:
+            recCoursesF.append(tup)
+    recCourses = recCoursesF + recCoursesB
 
-    recCourses = [list(elem) for elem in recCourses]
-    print(recCourses)
+    # convert python result into a JSON
+    recCoursesJSON = "["
+    for elem in recCourses:
+        recCoursesJSON += '{"subject": "%s", "number": %d, "name":"%s", "avg_rating": %s, "lastname": "%s", "avg_gpa": %s}, ' % (elem[0], elem[1], elem[2], elem[3], elem[4], elem[5])
+    recCoursesJSON = recCoursesJSON[:-2] + "]"
+    print(recCoursesJSON)
 
 
 #----------------------------------
@@ -104,9 +112,6 @@ def nearestNeighbors(netid, standing, department, user_courses, mycursor, mydb):
     # Create a new dataframe without the user ids.
     data_items = data.drop('user', 1)
 
-    #------------------------
-    # ITEM-ITEM CALCULATIONS
-    #------------------------
 
     # As a first step we normalize the user vectors to unit vectors.
 
@@ -131,9 +136,6 @@ def nearestNeighbors(netid, standing, department, user_courses, mycursor, mydb):
     # Lets get the top 11 similar artists for Beyonce
     # print(data_matrix.loc['beyonce'].nlargest(11))
 
-    #---------------------------
-    # USER-ITEM CALCULATIONS V1
-    #---------------------------
 
     # user = 5985 # The id of the user for whom we want to generate recommendations
     # user_index = data[data.user == user].index.tolist()[0] # Get the frame index
@@ -155,9 +157,6 @@ def nearestNeighbors(netid, standing, department, user_courses, mycursor, mydb):
     # print(known_user_likes)
     # print(score.nlargest(20))
 
-    #---------------------------
-    # USER-ITEM CALCULATIONS V2
-    #---------------------------
 
     # Construct a new dataframe with the 10 closest neighbors (most similar)
     # for each artist.

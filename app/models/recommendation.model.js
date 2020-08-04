@@ -9,7 +9,7 @@ const Recommendation = function(recommendation) {
 Recommendation.find = (netid, result) => {
     var dataToSend;
     // spawn new child process to call the python script
-    const python = spawn('python3', ['./app/recommendation/recommender.py', netid]);
+    const python = spawn('python', ['./app/recommendation/recommender.py', netid]);
     // collect data from script
     python.stdout.on('data', function (data) {
         console.log('Pipe data from python script ...');
@@ -19,20 +19,21 @@ Recommendation.find = (netid, result) => {
     python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
         // send data to browser
-        var s = dataToSend.replace(/\[/g, "{");
-        s = s.replace(/\]/g, "}");
-        s = s.replace(/Decimal\(\'/g, "");
-        s = s.replace(/\'\)/g, "");
-        s = s.replace(/\{\{/g, "[{");
-        s = s.replace(/\}\}/g, "}]");
-        s = s.replace(/\'/g, "\"");
+        // var s = dataToSend.replace(/\[/g, "{");
+        // s = s.replace(/\]/g, "}");
+        // s = s.replace(/Decimal\(\'/g, "");
+        // s = s.replace(/\'\)/g, "");
+        // s = s.replace(/\{\{/g, "[{");
+        // s = s.replace(/\}\}/g, "}]");
+        // s = s.replace(/\'/g, "\"");
 
-        var res = s.substring(s.indexOf("{"), s.indexOf("}") + 1);
-        s = "{'subject': 'CS', 'number': '101', 'gpa': '3.4}";
-        s = JSON.parse(s);
-        // console.log(s);
-        //var array = dataToSend.replace(/^\[|\]$/g, "").split(", ");
-        result(null, s);
+        // var res = s.substring(s.indexOf("{"), s.indexOf("}") + 1);
+        // s = '[{"subject": "CS", "number": 101, "gpa": 3.4},{"subject": "CS", "number": 125, "gpa": 34.0}]';
+        // s = JSON.parse(s);
+
+        console.log(dataToSend);
+        var array = JSON.parse(dataToSend)
+        result(null, array);
     });
 };
 
