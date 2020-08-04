@@ -3,10 +3,6 @@ import history from '../utils/history';
 import { Button } from 'reactstrap';
 
 export class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <>
