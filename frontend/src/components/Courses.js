@@ -219,7 +219,11 @@ export class Courses extends React.Component {
 
     async searchCourseByName(evt) {
         evt.preventDefault();
-        const {newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA} = this.state; 
+        var {newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA} = this.state; 
+
+        if (newNumber === 0) {
+            newNumber = undefined;
+        }
 
         if ( (newSubject === "" || newSubject === undefined)
             && (newNumber === "" || newNumber === undefined || newNumber === 0)
@@ -234,6 +238,7 @@ export class Courses extends React.Component {
         }
         const res = await basicSearch(newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA);
         var newClasses = res.data;
+        console.log(res);
         this.setState({ displayedCourses: newClasses });
     }
 
@@ -399,8 +404,8 @@ export class Courses extends React.Component {
                     <input type="text" placeholder="Course Name" onChange={this.updateCourseName}/>
                     <input type="text" placeholder="Keyword" onChange={this.updateKeyword}/>
                     <input type="text" placeholder="Professor Last Name" onChange={this.updateProfessor}/>
-                    <input type="number" placeholder="Rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRating}/>
                     <input type="number" placeholder="GPA" name="rating" min="0" max="4" step="0.01" onChange={this.updateGPA}/>
+                    <input type="number" placeholder="Rating" name="rating" min="1" max="5" step="0.01" onChange={this.updateRating}/>
                     <input type="submit" value="Search"/>
                 </form>
 

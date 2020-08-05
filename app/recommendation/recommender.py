@@ -55,7 +55,14 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
     # (Optional) Only selecting core classes from list of clases
     coreCourses = pd.read_csv('./app/data/grad_requirements_shorten.csv')
     row = coreCourses.loc[coreCourses["Acronym"] == department]["Courses"]
-    res = row.at[26].strip('][').split(', ')
+
+    rowNum = 0
+    if department=="CS":
+        rowNum = 26
+    elif department=="ECE":
+        rowNum = 15
+
+    res = row.at[rowNum].strip('][').split(', ')
     recCoursesF = []
     recCoursesB = []
     for tup in allCourses:

@@ -9,19 +9,7 @@ export class Recommendations extends React.Component {
         super(props);
         this.state = {
             // List of courses
-            recs: [
-                {
-                    subject: "CS",
-                    number: 411, 
-                    name: "Database Systems", 
-                    description: "Databases yo",
-                    CRN: 30109,
-                    avg_gpa: 3.77,
-                    firstname: "Abdu",
-                    lastname: "Alawini",
-                    avg_rating: 5.0
-                }
-            ],
+            recs: [],
             showGif: false,
             showForm: false,
             netID: "",
