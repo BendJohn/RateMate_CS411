@@ -14,13 +14,14 @@ def prerequisite(netid, standing, department, user_courses, mycursor):
     data_dept = data[data.Course.str.startswith(department + ' ')]
 
     # Add all department prerequisite courses
-    for uCourse in user_courses:
-        uCourse_prereqs = data_dept.loc[data_dept['Course'] == uCourse]
-        num_prereqs = uCourse_prereqs.iloc[0]['PrerequisiteNumber']
-        for i in range(num_prereqs):
-            prereq = uCourse_prereqs.iloc[0][str(i)]
-            if prereq.startswith(department + ' ') and prereq not in user_courses:
-                user_courses.append(prereq)
+    for i in range(2):
+        for uCourse in user_courses:
+            uCourse_prereqs = data_dept.loc[data_dept['Course'] == uCourse]
+            num_prereqs = uCourse_prereqs.iloc[0]['PrerequisiteNumber']
+            for i in range(num_prereqs):
+                prereq = uCourse_prereqs.iloc[0][str(i)]
+                if prereq.startswith(department + ' ') and prereq not in user_courses:
+                    user_courses.append(prereq)
 
     # Go through all department courses and check whether user can take them
     possibleCourses = []
