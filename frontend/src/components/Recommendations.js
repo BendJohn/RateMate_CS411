@@ -74,7 +74,7 @@ export class Recommendations extends React.Component {
             }
             const res = await getRecsByNetID(netid);
             console.log(res);
-            //this.setState({ recs: res.data });
+            this.setState({ recs: res });
         }
     }
 
@@ -101,7 +101,6 @@ export class Recommendations extends React.Component {
                 <td>{subject} </td>
                 <td>{number} </td>
                 <td>{name} </td>
-                <td> {description} </td>
                 <td>{avg_gpa} </td>
                 <td>{firstname}  {lastname} </td>
                 <td>{avg_rating} </td>
@@ -127,7 +126,7 @@ export class Recommendations extends React.Component {
 
                 <table id='table'>
                     <tbody>
-                        <tr> <th> CRN </th> <th> Subject </th> <th> Number </th> <th> Name </th> <th> Description </th>
+                        <tr> <th> CRN </th> <th> Subject </th> <th> Number </th> <th> Name </th>
                             <th> Average GPA </th> <th> Professor </th> <th> Avg Rating </th> </tr>
                         {this.renderTableData()}
                     </tbody>

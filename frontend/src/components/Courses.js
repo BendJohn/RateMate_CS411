@@ -222,7 +222,7 @@ export class Courses extends React.Component {
         const {newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA} = this.state; 
 
         if ( (newSubject === "" || newSubject === undefined)
-            && (newNumber === "" || newNumber === undefined)
+            && (newNumber === "" || newNumber === undefined || newNumber === 0)
             && (newCourseName === "" || newCourseName === undefined)
             && (newKeyword === "" || newKeyword === undefined)
             && (newProfessor === "" || newProfessor === undefined)
@@ -233,10 +233,6 @@ export class Courses extends React.Component {
             return;
         }
         const res = await basicSearch(newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA);
-        console.log(newRating);
-        console.log(newGPA);
-        console.log(newSubject, newNumber, newCourseName, newKeyword, newProfessor, newRating, newGPA);
-        console.log(res);
         var newClasses = res.data;
         this.setState({ displayedCourses: newClasses });
     }
@@ -358,7 +354,6 @@ export class Courses extends React.Component {
             return;
         }
 
-        console.log(this.state.displayedCourses);
         return this.state.displayedCourses.map((course, index) => {
         const { subject, number, name, description, CRN, avg_gpa, firstname, lastname, avg_rating } = course //destructuring
         const k = CRN + firstname + lastname;
